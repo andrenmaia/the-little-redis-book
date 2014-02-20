@@ -1,74 +1,79 @@
-## About ##
-The Little Redis Book is a free book introducing Redis.
+>  A versão em pt-br ainda está **EM CONSTRUÇÃO**
 
-The book was written by [Karl Seguin](http://openmymind.net), with [Perry Neal](http://twitter.com/perryneal)'s assistance.
+## Sobre ##
+*The Little Redis Book* é um livro gratuito e introdutório sobre o Redis.
 
-If you liked this book, maybe you'll also like [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/).
+O livro foi escrito por [Karl Seguin](http://openmymind.net), com assistência de [Perry Neal](http://twitter.com/perryneal). A tradução foi realizada por [André Maia](http://anmaia.wordpress.com).
 
-## License ##
-The book is freely distributed under the  [Attribution-NonCommercial 3.0 Unported license](<http://creativecommons.org/licenses/by-nc/3.0/legalcode>).
+Se você gostou deste livro, talvez você também gostará de [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/).
 
-## Translations ##
+## Licença ##
+O livro é distribuído gratuitamente por meio da licença [Attribution-NonCommercial 3.0 Unported license](<http://creativecommons.org/licenses/by-nc/3.0/legalcode>).
 
-* [Russian](https://github.com/kondratovich/the-little-redis-book)
-* [Italian](https://github.com/sandroconforto/the-little-redis-book) - [pdf](https://github.com/sandroconforto/the-little-redis-book/raw/master/book/redisIt.pdf)
-* [Chinese](https://github.com/JasonLai256/the-little-redis-book)
-* [Japanese](https://github.com/craftgear/the-little-redis-book/)
-* [Spanish](https://github.com/raulexposito/the-little-redis-book)
 
-## Formats ##
-The book is written in [Markdown](http://daringfireball.net/projects/markdown/) and converted to PDF using [Pandoc](http://johnmacfarlane.net/pandoc/).
+## Outras traduções ##
 
-The TeX template makes use of [Lena Herrmann's JavaScript highlighter](http://lenaherrmann.net/2010/05/20/javascript-syntax-highlighting-in-the-latex-listings-package).
+* [Inglês](https://github.com/karlseguin/the-little-redis-book)
+* [Russo](https://github.com/kondratovich/the-little-redis-book)
+* [Italiano](https://github.com/sandroconforto/the-little-redis-book) - [pdf](https://github.com/sandroconforto/the-little-redis-book/raw/master/book/redisIt.pdf)
+* [Chinês](https://github.com/JasonLai256/the-little-redis-book)
+* [Japonês](https://github.com/craftgear/the-little-redis-book/)
+* [Espanhol](https://github.com/raulexposito/the-little-redis-book)
 
-Kindle and ePub format provided using [Pandoc](http://johnmacfarlane.net/pandoc/).
+## Formatos ##
+O livro foi escrito em  [Markdown](http://daringfireball.net/projects/markdown/)  e convertido para PDF usando [Pandoc](http://johnmacfarlane.net/pandoc/).
 
-## Generating books ##
-Packages listed below are for Ubuntu. If you use another OS or distribution names would be similar.
+O template TeX faz uso do [Lena Herrmann's JavaScript highlighter](http://lenaherrmann.net/2010/05/20/javascript-syntax-highlighting-in-the-latex-listings-package).
+
+Os formatos Kindle e ePub são provido utilizando o [Pandoc](http://johnmacfarlane.net/pandoc/).
+
+## Geração dos livros ##
+Os pacotes listados abaixo são para Ubuntu. Se você utiliza outro Sistema Operacional (SO) os nomes de distribuição devem ser similares.
 
 ### PDF
 
-#### Dependencies
+#### Dependências
 
-Packages:
+Pacotes:
 
 * `pandoc`
 * `texlive-xetex`
 * `texlive-latex-extra`
 * `texlive-latex-recommended`
 
-You should have [some fonts](https://github.com/karlseguin/the-little-redis-book/blob/master/common/pdf-template.tex#L11) installed too.
-Or you could change them to other ones if you want. Consider that fonts could cause [building troubles](https://github.com/karlseguin/the-little-redis-book/issues/26).
+Você deve ter [algumas fontes](https://github.com/karlseguin/the-little-redis-book/blob/master/common/pdf-template.tex#L11) instaladas também.
 
-#### Building
+Ou você pode trocá-las para outras se quiser. Considere que as fontes podem causar [problemas de geração/construção](https://github.com/karlseguin/the-little-redis-book/issues/26).
 
-Run `make en/redis.pdf`.
+#### Construção
+
+Execute `make pt-br/redis.pdf`.
 
 ### ePub
 
-#### Dependencies
+#### Dependências
 
-Packages:
+Pacotes:
 
 * `pandoc`
 
-#### Building
+#### Construção
 
-Run `make en/redis.epub`.
+Execute `make pt-br/redis.pdf`.
 
 ### Mobi
 
-#### Dependencies
+#### Dependências
 
-Packages:
+Pacotes:
 
 * `pandoc`
 
-You should have [KindleGen](http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211) installed too.
+Você também deve ter o [KindleGen](http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211) instalado.
 
-#### Building
+#### Construção
 
-Run `make en/redis.mobi`.
+Execute `make pt-br/redis.mobi`.
 
-## Title Image ##
-A PSD of the title image is included. The font used is [Comfortaa](http://www.dafont.com/comfortaa.font).
+## Imagem de título ##
+Um PSD da imagem de título está inclusa. A fonte utilizado é [Comfortaa](http://www.dafont.com/comfortaa.font).
