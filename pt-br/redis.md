@@ -1,81 +1,72 @@
 # Sobre este livro
 
 ## Licença
-
 _The Little Redis Book_ está licenciado sobre _Attribution-NonCommercial 3.0 Unported license_. Você não deve pagar por este livro.
 
 Você é livre para copiar, distribuir, modificar ou distribuir este livro. No entanto, eu peço que você sempre atribua o livro a mim, Karl Seguin, e não o use para propósitos comerciais.
 
-Você pode ver o **texto completo** sobre **a licença** em: <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
-
+Você pode ver o **texto completo** sobre **a licença** em <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
 
 ## Sobre o Autor
-
 Karl Seguin é um desenvolvedor com experiência em diversas áreas e tecnologias. Ele é um contribuinte ativo de projetos de __software open-source__ (código aberto), um escritor técnico e, ocasionalmente, um palestrante. Ele escreveu vários artigos, bem como algumas ferramentas, sobre o Redis. O Redis lidera o ranking e estatística de seu serviço gratuito para jogadores casuais: [mogade.com](http://mogade.com/).
 
-Karl escreveu [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/), o gratuito e popular livro sobre MongoDB.
+Karl escreveu [The Little MongoDB Book (http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/), o gratuito e popular livro sobre MongoDB.
 
-Seu blog pode ser visto em <http://openmymind.net> e seus tweets em [@karlseguin](http://twitter.com/karlseguin)
+Seu blog pode ser visto em <http://openmymind.net> e seus tweets em
+[@karlseguin](http://twitter.com/karlseguin).
 
 ## Agradecimentos
+Um agradecimento especial a [Perry Neal](https://twitter.com/perryneal) por me emprestar seus olhos, mente e paixão. Você me proveu inestimável auxílio. Obrigado.
 
-Um agradecimento especial a [Perry Neal](https://twitter.com/perryneal)  por me emprestar seus olhos, mente e paixão. Você me proveu inestimável auxílio. Obrigado. 
+## Última versão
+A última versão deste livro é disponível em: <http://github.com/karlseguin/the-little-redis-book>
 
-## Última versão 
-
-A última versão deste livro é disponível em:
-<http://github.com/karlseguin/the-little-redis-book>
-
-# Introdução 
-
+# Introdução
 Ao longo dos últimos anos, as técnicas e ferramentas utilizadas para persistir e consultar dados têm crescido a um ritmo incrível. Embora seja seguro dizer que bancos de dados relacionais não vão a lugar algum, também podemos dizer que o ecossistema em torno dos dados nunca vai ser o mesmo.
 
-De todas as novas ferramentas e soluções, para mim, Redis tem sido a mais emocionante. Por quê? Primeiro porque é inacreditavelmente fácil de aprender. Hora é a unidade certa para usar quando se fala sobre a quantidade de tempo que se leva para se acostumar com o Redis. Em segundo lugar, ele resolve um conjunto específico de problemas ao mesmo tempo que é bastante genérico. O que exatamente isso quer dizer? O Redis não tenta ser todas as coisas para todos os dados. À medida que você começa a conhecer o Redis, se tornará incrivelmente evidente o que ele faz e o que não pertence a ele. E quando isso acontecer, como um desenvolvedor,  será uma grande experiência.
+De todas as novas ferramentas e soluções, para mim, Redis tem sido a mais emocionante. Por quê? Primeiro porque é inacreditavelmente fácil de aprender. Hora é a unidade certa para usar quando se fala sobre a quantidade de tempo que se leva para se acostumar com o Redis. Em segundo lugar, ele resolve um conjunto específico de problemas ao mesmo tempo que é bastante genérico. O que exatamente isso quer dizer? O Redis não tenta ser todas as coisas para todos os dados. À medida que você começa a conhecer o Redis, se tornará incrivelmente evidente o que ele faz e o que não pertence a ele. E quando isso acontecer, como um desenvolvedor, será uma grande experiência. 
 
-While you can build a complete system using Redis only, I think most people will find that it supplements their more generic data solution - whether that be a traditional relational database, a document-oriented system, or something else. It's the kind of solution you use to implement specific features. In that way, it's similar to an indexing engine. You wouldn't build your entire application on Lucene. But when you need good search, it's a much better experience - for both you and your users. Of course, the similarities between Redis and indexing engines end there.
+Enquanto você pode criar um sistema completo utilizando apenas o Redis, eu acho que a maioria das pessoas vão achar que ele suplementa sua solução de dados mais genérica - quer seja um banco de dados relacional tradicional, um sistema orientado a documentos, ou outra coisa. Esse é o tipo de solução que você usa para implementar funcionalidades específicas. Desse modo, ele é similar a um motor de indexação. Você não iria construir sua aplicação completa no Lucene. Mas quanto você precisa de uma boa busca, é uma experiência muito melhor - para ambos você e seu usuário. Claro, as similaridades entre Redis e motores de indexação terminam ai.
 
-The goal of this book is to build the foundation you'll need to master Redis. We'll focus on learning Redis' five data structures and look at various data modeling approaches. We'll also touch on some key administrative details and debugging techniques.
+O objetivo deste livro é construir a base que você precisará para dominar o Redis. Iremos nos concentrar nas cinco estruturas de dados do Redis e olhar vários abordagens de moedagens de dados. Iremos também tocar em alguns detalhes administrativos e técnicas de debugging.
 
-# Getting Started
+# Começando
+Vamos aprender de forma diferente: alguns gostam de sujar suas mãos, alguns gostam de assistir videos, e alguns gostam de ler.
 
-We all learn differently: some like to get their hands dirty, some like to watch videos, and some like to read. Nothing will help you understand Redis more than actually experiencing it. Redis is easy to install and comes with a simple shell that'll give us everything we need. Let's take a couple minutes and get it up and running on our machine.
+Nada o ajudará a entender o Redis mais do que realmente experimenta-lo. Redis é simple de instalar e vem com um shell simples que nos dará tudo o que é necessário. Vamos gastar alguns minutos e colocá-lo para rodar em nossas máquinas. 
 
-## On Windows
+## No Windows
+O próprio Redis não suporta oficialmente o Windows, mas existem opções disponíveis. Você não as utilizaria em produção, mas eu nunca vivi nenhuma limitação durante o desenvolvimento.
 
-Redis itself doesn't officially support Windows, but there are options available. You wouldn't run these in production, but I've never experienced any limitations while doing development.
+Uma versão da Microsoft Open Technologies, Inc. pode ser encontrar em <https://github.com/MSOpenTech/redis>.Esta solução não está pronta para uso em sistema de produção.
 
-A port by Microsoft Open Technologies, Inc. can be found at <https://github.com/MSOpenTech/redis>. As of this writing the solution is not ready for use in production systems.
+Um outra solução, que está disponível há algum tempo, pode ser encontrada em <https://github.com/dmajkic/redis/downloads>. Você pode baixar a versão mais atual (que deve estar no inicio da lista). Extraia o arquivo zip e, baseado na sua arquitetura, abra a pasta `64bit` ou `32bit.`
 
-Another solution, which has been available for some time, can be found at <https://github.com/dmajkic/redis/downloads>. You can download the most up to date version (which should be at the top of the list). Extract the zip file and, based on your architecture, open either the `64bit` or `32bit` folder.
+## No \*nix e MacOSX
+Para usuários \*nix e Mac, compilá-lo a partir do código fonte é sua melhor opção. As instruções, juntamente com o número da versão mais recente, estão disponíveis em <http://redis.io/download>. No momento da escrita deste livro a última versão é 2.6.2; para instalar essa versão nós executaríamos:
 
-## On *nix and MacOSX
+    wget http://redis.googlecode.com/files/redis-2.6.2.tar.gz
+    tar xzf redis-2.6.2.tar.gz
+    cd redis-2.6.2
+    make
 
-For *nix and Mac users, building it from source is your best option. The instructions, along with the latest version number, are available at <http://redis.io/download>. At the time of this writing the latest version is 2.6.2; to install this version we would execute:
+(De forma alternativa, o Redis está disponível através de vários gerenciadores de pacotes. Por exemplo, usuários de MacOSX com Homebrew instalados pode simplesmente digitar `brew install redis`.)
 
-	wget http://redis.googlecode.com/files/redis-2.6.2.tar.gz
-	tar xzf redis-2.6.2.tar.gz
-	cd redis-2.6.2
-	make
+Se você compilá-lo a partir do código fonte, as saídas binárias foram colocadas na pasta `src`. Navegue para a pastas `src` executando `cd src`.
 
-(Alternatively, Redis is available via various package managers. For example, MacOSX users with Homebrew installed can simply type `brew install redis`.)
+## Executando e conectando no Redis
+Se tudo funcionou, o executável do Redis deve estar disponível ao seu alcance. O Redis tem um punhado de arquivos executáveis. Nos concentraremos no servidor Redis e na interface de linha de comando do Redis (um cliente DOS-like). Vamos iniciar o servidor. No Windows, duplo clique em `redis-server`. No \*nix/MacOSX execute `./redis-server`. 
 
-If you built it from source, the binary outputs have been placed in the `src` directory. Navigate to the `src` directory by executing `cd src`.
+Se você ler a mensagem de inicialização, você verá uma advertência de que o arquivo `redis.conf` não pode ser encontrado. Ao invés disso o Redis utilizará padrão internos, o que é suficiente para o que estamos fazendo.
 
-## Running and Connecting to Redis
+Depois inicie o console do Redis por duplo clique no `redis-cli` (Windows) ou executando `./redis-cli` (\*nix/MacOSX). Esse irá conectar ao servidor local na porta padrão (6379).
 
-If everything worked, the Redis binaries should be available at your fingertips. Redis has a handful of executables. We'll focus on the Redis server and the Redis command line interface (a DOS-like client). Let's start the server. In Windows, double click `redis-server`. On *nix/MacOSX run `./redis-server`.
+Você pode testar se tudo está funcionando pelo digitando `info` na interface de linha de comando. Você verá (espero) um monte de pares chave-valor que fornecem um grande quantidade de informações sobre o estado interno do servidor.
 
-If you read the start up message you'll see a warning that the `redis.conf` file couldn't be found. Redis will instead use built-in defaults, which is fine for what we'll be doing.
-
-Next start the Redis console by either double clicking `redis-cli` (Windows) or running `./redis-cli` (*nix/MacOSX). This will connect to the locally-running server on the default port (6379).
-
-You can test that everything is working by entering `info` into the command line interface. You'll hopefully see a bunch of key-value pairs which provide a great deal of insight into the server's status.
-
-If you are having problems with the above setup I suggest you seek help in the [official Redis support group](https://groups.google.com/forum/#!forum/redis-db).
+Caso você esteja tendo problemas com o setup acima eu sugiro que você procure ajuda no [grupo oficial de suporte do Redis](https://groups.google.com/forum/#!forum/redis-db).
 
 # Redis Drivers
-
-As you'll soon learn, Redis' API is best described as an explicit set of functions. It has a very simple and procedural feel to it. This means that whether you are using the command line tool, or a driver for your favorite language, things are very similar. Therefore, you shouldn't have any problems following along if you prefer to work from a programming language. If you want, head over to the [client page](http://redis.io/clients) and download the appropriate driver.
+Como você vai aprender em breve, a API do Redis é melhor descrita como um conjunto explícito de funções. Isso significa que se você está usando a ferramenta de linha de comando, ou um driver para a sua linguagem favorita, as coisas são muito similares. Então, você não deve ter qualquer problema acompanhando se você preferir trabalhar com uma linguagem de programação. Se você quiser, siga para a [página do client](http://redis.io/clients) e baixe o driver apropriado.
 
 # Chapter 1 - The Basics
 
