@@ -10,6 +10,9 @@ Se você gostou deste livro, talvez você também gostará de [The Little MongoD
 ## Licença ##
 O livro é distribuído gratuitamente por meio da licença [Attribution-NonCommercial 3.0 Unported license](<http://creativecommons.org/licenses/by-nc/3.0/legalcode>).
 
+## Tradução ##
+Está versão está sendo traduzida para português (pt-br) por [André Maia](http://about.me/andrenmaia).
+
 
 ## Outras traduções ##
 
