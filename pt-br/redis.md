@@ -66,7 +66,7 @@ Você pode testar se tudo está funcionando pelo digitando `info` na interface d
 Caso você esteja tendo problemas com o setup acima eu sugiro que você procure ajuda no [grupo oficial de suporte do Redis](https://groups.google.com/forum/#!forum/redis-db).
 
 # Redis Drivers
-Como você vai aprender em breve, a API do Redis é melhor descrita como um conjunto explícito de funções. Isso significa que se você está usando a ferramenta de linha de comando, ou um driver para a sua linguagem favorita, as coisas são muito similares. Então, você não deve ter qualquer problema acompanhando se você preferir trabalhar com uma linguagem de programação. Se você quiser, siga para a [página do client](http://redis.io/clients) e baixe o driver apropriado.
+Como você vai aprender em breve, a API do Redis é melhor descrita como um conjunto explícito de funções. Isso significa que se você está usando a ferramenta de linha de comando, ou um driver para a sua linguagem favorita, as coisas são muito similares. Então, você não deve ter qualquer problema acompanhando se você preferir trabalhar com uma linguagem de programação. Se você quiser, siga para a [página dos __clients__](http://redis.io/clients) e baixe o driver apropriado.
 
 # Chapter 1 - The Basics
 
