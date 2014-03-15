@@ -3,7 +3,7 @@
 ## Licença
 _The Little Redis Book_ está licenciado sobre _Attribution-NonCommercial 3.0 Unported license_. Você não deve pagar por este livro.
 
-Você é livre para copiar, distribuir, modificar ou distribuir este livro. No entanto, eu peço que você sempre atribua o livro a mim, Karl Seguin, e não o use para propósitos comerciais.
+Você está livre para copiar, distribuir, modificar ou distribuir este livro. No entanto, eu peço que você sempre atribua o livro a mim, Karl Seguin, e não o use para propósitos comerciais.
 
 Você pode ver o **texto completo** sobre **a licença** em <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
 
@@ -28,19 +28,19 @@ De todas as novas ferramentas e soluções, para mim, Redis tem sido a mais emoc
 
 Enquanto você pode criar um sistema completo utilizando apenas o Redis, eu acho que a maioria das pessoas vão achar que ele suplementa sua solução de dados mais genérica - quer seja um banco de dados relacional tradicional, um sistema orientado a documentos, ou outra coisa. Esse é o tipo de solução que você usa para implementar funcionalidades específicas. Desse modo, ele é similar a um motor de indexação. Você não iria construir sua aplicação completa no Lucene. Mas quanto você precisa de uma boa busca, é uma experiência muito melhor - para ambos você e seu usuário. Claro, as similaridades entre Redis e motores de indexação terminam ai.
 
-O objetivo deste livro é construir a base que você precisará para dominar o Redis. Iremos nos concentrar nas cinco estruturas de dados do Redis e olhar vários abordagens de moedagens de dados. Iremos também tocar em alguns detalhes administrativos e técnicas de debugging.
+O objetivo deste livro é construir a base que você precisará para dominar o Redis. Iremos nos concentrar nas cinco estruturas de dados do Redis e olhar vários abordagens de moedagens de dados. Iremos também tocar em alguns detalhes administrativos e técnicas de _debugging_.
 
 # Começando
 Vamos aprender de forma diferente: alguns gostam de sujar suas mãos, alguns gostam de assistir videos, e alguns gostam de ler.
 
-Nada o ajudará a entender o Redis mais do que realmente experimenta-lo. Redis é simple de instalar e vem com um shell simples que nos dará tudo o que é necessário. Vamos gastar alguns minutos e colocá-lo para rodar em nossas máquinas. 
+Nada o ajudará a entender o Redis mais do que realmente experimenta-lo. Redis é simples de instalar e vem com um _shell_ simples que nos dará tudo o que é necessário. Vamos gastar alguns minutos e colocá-lo para rodar em nossas máquinas. 
 
 ## No Windows
 O próprio Redis não suporta oficialmente o Windows, mas existem opções disponíveis. Você não as utilizaria em produção, mas eu nunca vivi nenhuma limitação durante o desenvolvimento.
 
 Uma versão da Microsoft Open Technologies, Inc. pode ser encontrar em <https://github.com/MSOpenTech/redis>.Esta solução não está pronta para uso em sistema de produção.
 
-Um outra solução, que está disponível há algum tempo, pode ser encontrada em <https://github.com/dmajkic/redis/downloads>. Você pode baixar a versão mais atual (que deve estar no inicio da lista). Extraia o arquivo zip e, baseado na sua arquitetura, abra a pasta `64bit` ou `32bit.`
+Um outra solução, que está disponível há algum tempo, pode ser encontrada em <https://github.com/dmajkic/redis/downloads>. Você pode baixar a versão mais atual (que deve estar no inicio da lista). Extraia o arquivo _zip_ e, baseado na sua arquitetura, abra a pasta `64bit` ou `32bit.`
 
 ## No \*nix e MacOSX
 Para usuários \*nix e Mac, compilá-lo a partir do código fonte é sua melhor opção. As instruções, juntamente com o número da versão mais recente, estão disponíveis em <http://redis.io/download>. No momento da escrita deste livro a última versão é 2.6.2; para instalar essa versão nós executaríamos:
@@ -63,16 +63,16 @@ Depois inicie o console do Redis por duplo clique no `redis-cli` (Windows) ou ex
 
 Você pode testar se tudo está funcionando pelo digitando `info` na interface de linha de comando. Você verá (espero) um monte de pares chave-valor que fornecem um grande quantidade de informações sobre o estado interno do servidor.
 
-Caso você esteja tendo problemas com o setup acima eu sugiro que você procure ajuda no [grupo oficial de suporte do Redis](https://groups.google.com/forum/#!forum/redis-db).
+Caso você esteja tendo problemas com o _setup_ acima eu sugiro que você procure ajuda no [grupo oficial de suporte do Redis](https://groups.google.com/forum/#!forum/redis-db).
 
 # Redis Drivers
-Como você vai aprender em breve, a API do Redis é melhor descrita como um conjunto explícito de funções. Isso significa que se você está usando a ferramenta de linha de comando, ou um driver para a sua linguagem favorita, as coisas são muito similares. Então, você não deve ter qualquer problema acompanhando se você preferir trabalhar com uma linguagem de programação. Se você quiser, siga para a [página dos __clients__](http://redis.io/clients) e baixe o driver apropriado.
+Como você vai aprender em breve, a API do Redis é melhor descrita como um conjunto explícito de funções. Isso significa que se você está usando a ferramenta de linha de comando, ou um _driver_ para a sua linguagem favorita, as coisas são muito similares. Então, você não deve ter qualquer problema acompanhando se você preferir trabalhar com uma linguagem de programação. Se você quiser, siga para a [página dos __clients__](http://redis.io/clients) e baixe o _driver_ apropriado.
 
-# Chapter 1 - The Basics
+# Capítulo 1 - O Básico
 
-What makes Redis special? What types of problems does it solve? What should developers watch out for when using it? Before we can answer any of these questions, we need to understand what Redis is.
+O que faz o Redis especial? Quais tipos de problemas ele resolve? O que os desenvolvedores devem estar atentos quando usá-lo? Antes de respondermos qualquer dessas questões, precisamos entender o que é o Redis.
 
-Redis is often described as an in-memory persistent key-value store. I don't think that's an accurate description. Redis does hold all the data in memory (more on this in a bit), and it does write that out to disk for persistence, but it's much more than a simple key-value store. It's important to step beyond this misconception otherwise your perspective of Redis and the problems it solves will be too narrow.
+Redis é frequentemente descrito como um armazenamento de chave-valor persistente em memória. Eu não acho que essa seja uma descrição exata. Redis mantém todos os dados em memória (mais sobre isso à frente), e os grava no disco para persistência, isso é muitos mais do um simples armazenamento chave-valor. É importante dar um passo além desses equívoco, caso contrário a sua perspectiva do Redis e dos problemas que ele resolve será muito restrita.
 
 The reality is that Redis exposes five different data structures, only one of which is a typical key-value structure. Understanding these five data structures, how they work, what methods they expose and what you can model with them is the key to understanding Redis. First though, let's wrap our heads around what it means to expose data structures.
 
