@@ -104,7 +104,7 @@ Essa é a anatomia básica de um comando do Redis. Primeiro nós temos o comando
 
 	get users:leto
 
-Vá em frente e teste algumas outras combinações. Chaves e valores são conceitos fundamentais, e os comandos `get` e `set` são a forma mais simples de testá-los. Crie mais usuários, tente tipos diferentes de chaves, tente valores diferentes.
+Vá em frente e teste algumas outras combinações. Chaves e valores são conceitos fundamentais, e os comandos `get` e `set` são as formas mais simples de testá-los. Crie mais usuários, tente tipos diferentes de chaves, tente valores diferentes.
 
 ## Querying
 
