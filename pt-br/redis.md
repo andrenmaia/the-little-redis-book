@@ -24,7 +24,7 @@ A última versão deste livro é disponível em: <http://github.com/karlseguin/t
 # Introdução
 Ao longo dos últimos anos, as técnicas e ferramentas utilizadas para persistir e consultar dados têm crescido a um ritmo incrível. Embora seja seguro dizer que bancos de dados relacionais não vão a lugar algum, também podemos dizer que o ecossistema em torno dos dados nunca vai ser o mesmo.
 
-De todas as novas ferramentas e soluções, para mim, Redis tem sido a mais emocionante. Por quê? Primeiro porque é inacreditavelmente fácil de aprender. Hora é a unidade certa para usar quando se fala sobre a quantidade de tempo que se leva para se acostumar com o Redis. Em segundo lugar, ele resolve um conjunto específico de problemas ao mesmo tempo que é bastante genérico. O que exatamente isso quer dizer? O Redis não tenta ser todas as coisas para todos os dados. À medida que você começa a conhecer o Redis, se tornará incrivelmente evidente o que ele faz e o que não pertence a ele. E quando isso acontecer, como um desenvolvedor, será uma grande experiência. 
+De todas as novas ferramentas e soluções, para mim, Redis tem sido a mais emocionante. Por quê? Primeiro porque é inacreditavelmente fácil de aprender. Hora é a unidade certa para usar quando se fala sobre a quantidade de tempo que se leva para se acostumar com o Redis. Em segundo lugar, ele resolve um conjunto específico de problemas ao mesmo tempo que é bastante genérico. O que exatamente isso quer dizer? O Redis não tenta ser todas as coisas para todos os dados. À medida que você começa a conhecer o Redis, se tornará incrivelmente evidente o que ele faz e o que não pertence a ele. E quando isso acontecer, como um desenvolvedor, será uma grande experiência.
 
 Enquanto você pode criar um sistema completo utilizando apenas o Redis, eu acho que a maioria das pessoas vão achar que ele suplementa sua solução de dados mais genérica - quer seja um banco de dados relacional tradicional, um sistema orientado a documentos, ou outra coisa. Esse é o tipo de solução que você usa para implementar funcionalidades específicas. Desse modo, ele é similar a um motor de indexação. Você não iria construir sua aplicação completa no Lucene. Mas quanto você precisa de uma boa busca, é uma experiência muito melhor - para ambos você e seu usuário. Claro, as similaridades entre Redis e motores de indexação terminam ai.
 
@@ -33,7 +33,7 @@ O objetivo deste livro é construir a base que você precisará para dominar o R
 # Começando
 Vamos aprender de forma diferente: alguns gostam de sujar suas mãos, alguns gostam de assistir videos, e alguns gostam de ler.
 
-Nada o ajudará a entender o Redis mais do que realmente experimenta-lo. Redis é simples de instalar e vem com um _shell_ simples que nos dará tudo o que é necessário. Vamos gastar alguns minutos e colocá-lo para rodar em nossas máquinas. 
+Nada o ajudará a entender o Redis mais do que realmente experimenta-lo. Redis é simples de instalar e vem com um _shell_ simples que nos dará tudo o que é necessário. Vamos gastar alguns minutos e colocá-lo para rodar em nossas máquinas.
 
 ## No Windows
 O próprio Redis não suporta oficialmente o Windows, mas existem opções disponíveis. Você não as utilizaria em produção, mas eu nunca vivi nenhuma limitação durante o desenvolvimento.
@@ -55,7 +55,7 @@ Para usuários \*nix e Mac, compilá-lo a partir do código fonte é sua melhor 
 Se você compilá-lo a partir do código fonte, as saídas binárias foram colocadas na pasta `src`. Navegue para a pastas `src` executando `cd src`.
 
 ## Executando e conectando no Redis
-Se tudo funcionou, o executável do Redis deve estar disponível ao seu alcance. O Redis tem um punhado de arquivos executáveis. Nos concentraremos no servidor Redis e na interface de linha de comando do Redis (um cliente DOS-like). Vamos iniciar o servidor. No Windows, duplo clique em `redis-server`. No \*nix/MacOSX execute `./redis-server`. 
+Se tudo funcionou, o executável do Redis deve estar disponível ao seu alcance. O Redis tem um punhado de arquivos executáveis. Nos concentraremos no servidor Redis e na interface de linha de comando do Redis (um cliente DOS-like). Vamos iniciar o servidor. No Windows, duplo clique em `redis-server`. No \*nix/MacOSX execute `./redis-server`.
 
 Se você ler a mensagem de inicialização, você verá uma advertência de que o arquivo `redis.conf` não pode ser encontrado. Ao invés disso o Redis utilizará padrão internos, o que é suficiente para o que estamos fazendo.
 
@@ -74,37 +74,37 @@ O que faz o Redis especial? Quais tipos de problemas ele resolve? O que os desen
 
 Redis é frequentemente descrito como um armazenamento de chave-valor persistente em memória. Eu não acho que essa seja uma descrição exata. Redis mantém todos os dados em memória (mais sobre isso à frente), e os grava no disco para persistência, isso é muitos mais do um simples armazenamento chave-valor. É importante dar um passo além desses equívoco, caso contrário a sua perspectiva do Redis e dos problemas que ele resolve será muito restrita.
 
-The reality is that Redis exposes five different data structures, only one of which is a typical key-value structure. Understanding these five data structures, how they work, what methods they expose and what you can model with them is the key to understanding Redis. First though, let's wrap our heads around what it means to expose data structures.
+A realidade é que o Redis expõem cinco estruturas de dados diferentes, apenas uma destas é uma estrutura chave-valor. Entendendo estas cinco estruturas de dados, como funcionam, quais métodos expõem e o que se pode modelar é a chave para entender o Redis. Primeiramente, vamos pensar sobre o que significa expor estruturas de dados.
 
-If we were to apply this data structure concept to the relational world, we could say that databases expose a single data structure - tables. Tables are both complex and flexible. There isn't much you can't model, store or manipulate with tables. However, their generic nature isn't without drawbacks. Specifically, not everything is as simple, or as fast, as it ought to be. What if, rather than having a one-size-fits-all structure, we used more specialized structures? There might be some things we can't do (or at least, can't do very well), but surely we'd gain in simplicity and speed?
+Se fôssemos aplicar este conceito de estruturas de dados para o mundo relacional, poderíamos dizer que bases de dados expõem uma única estrutura de dados - tabelas. Tabelas são complexas e flexíveis. Há muito que se possa modelar, armazenar ou manipular com tabelas. No entanto, sua natureza genérica não está livre de desvantagens. Especialmente porque nem tudo é tão simples, ou tão rápido, como deveria ser. E se, em vez de termos uma estrutura _one-size-fits-all_, usássemos estruturas mais especializadas? Pode haver algumas coisas que não possamos fazer (ou pelo menos, não possamos fazer muito bem), mas com certeza teríamos ganho em simplicidade e velocidade?
 
-Using specific data structures for specific problems? Isn't that how we code? You don't use a hashtable for every piece of data, nor do you use a scalar variable. To me, that defines Redis' approach. If you are dealing with scalars, lists, hashes, or sets, why not store them as scalars, lists, hashes and sets? Why should checking for the existence of a value be any more complex than calling `exists(key)` or slower than O(1) (constant time lookup which won't slow down regardless of how many items there are)?
+Usar um estrutura de dados específica para problemas específicos? Não é assim que nós codificamos? Você não usa uma _hashtable_ para cada pedaço de dado e nem para cada variável escalar. Para mim, isso define a abordagem do Redis. Se você está manipulando escalares, listas, _hashes_, ou _sets_, por que não armazená-los como escalares, listas, _hashes_ e _sets_? Por que verificar a existência de um valor deve ser mais complexo do que chamar `exists(key)` ou mais lento do que O(1) (busca de tempo constante que não diminuirá, independentemente de quantos itens existirem)?
 
-# The Building Blocks
+# Os blocos de construção (the building blocks)
 
-## Databases
+## Bases de dados
 
-Redis has the same basic concept of a database that you are already familiar with. A database contains a set of data. The typical use-case for a database is to group all of an application's data together and to keep it separate from another application's.
+O Redis tem o mesmo conceito básico de uma base de dados que você já deve estar familiarizado. Uma base de dados contém um conjunto de dados. O caso de uso típico para um base de dados é agrupar todos os dados de uma aplicação e mantê-los separados de outras aplicações.
 
-In Redis, databases are simply identified by a number with the default database being number `0`. If you want to change to a different database you can do so via the `select` command. In the command line interface, type `select 1`. Redis should reply with an `OK` message and your prompt should change to something like `redis 127.0.0.1:6379[1]>`. If you want to switch back to the default database, just enter `select 0` in the command line interface.
+No Redis, bases de dados são simplesmente identificadas por um número, sendo a base de dados padrão iniciando no número `0`. Se você desejar selecionar uma base de dados diferente, você pode fazê-lo via o comando `select`. Na interface de linha de comando, digite `select 1`. O Redis deve responder uma mensagem `OK` e o seu _prompt_ deve alterar para algo como `redis 127.0.0.1:6379[1]>`. Se você quiser voltar para a base de dados padrão, entre com o comando `select 0` na interface de linha de comando.
 
-## Commands, Keys and Values
+## Comando, Chaves e Valores
 
-While Redis is more than just a key-value store, at its core, every one of Redis' five data structures has at least a key and a value. It's imperative that we understand keys and values before moving on to other available pieces of information.
+Enquanto o Redis é mais do que apenas um banco de dados chave-valor, em seu núcleo, cada uma de suas cinco estruturas de dados tem pelo menos um chave e um valor. É importante entendermos chaves e valores antes de continuarmos.
 
-Keys are how you identify pieces of data. We'll be dealing with keys a lot, but for now, it's good enough to know that a key might look like `users:leto`. One could reasonably expect such a key to contain information about a user named `leto`. The colon doesn't have any special meaning, as far as Redis is concerned, but using a separator is a common approach people use to organize their keys.
+Chaves são como você identifica pedaços de informações. Nós vamos lidar muito com chaves, mas agora, é o suficiente sabermos que um chave pode parecer com `user:leto`. Nesse caso, esperasse que essa seja uma chave que contenha informações sobre um usuário chamado `leto`. Os dois pontos não tem significado especial, no que diz respeito aos interesses do Redis, mas usar um separador é uma abordagem comum para organizar chaves.
 
-Values represent the actual data associated with the key. They can be anything. Sometimes you'll store strings, sometimes integers, sometimes you'll store serialized objects (in JSON, XML or some other format). For the most part, Redis treats values as a byte array and doesn't care what they are. Note that different drivers handle serialization differently (some leave it up to you) so in this book we'll only talk about string, integer and JSON.
+Valores representam o data atual associado com a chave. Eles podem ser qualquer coisa. As vezes você armazenará _strings_, as vezes inteiros, as vezes você armazenará objetos (em JSON, XML ou algum outro formato). Na maioria das vezes, o Redis trata valores como um _array_ de _bytes_ e não se importa com o que eles são. Note que diferentes _drivers_ serializam objetos de formas diferentes (alguns deixam isso para você), então, neste livro só falaremos sobre _strings_, inteiros, e JSON.
 
-Let's get our hands a little dirty. Enter the following command:
+Vamos sujar um pouco nossas mão. Entre com o comando a seguir:
 
 	set users:leto "{name: leto, planet: dune, likes: [spice]}"
 
-This is the basic anatomy of a Redis command. First we have the actual command, in this case `set`. Next we have its parameters. The `set` command takes two parameters: the key we are setting and the value we are setting it to. Many, but not all, commands take a key (and when they do, it's often the first parameter). Can you guess how to retrieve this value? Hopefully you said (but don't worry if you weren't sure!):
+Essa é a anatomia básica de um comando do Redis. Primeiro nós temos o comando atual, neste caso `set`. Depois temos seus parâmetros. O comando `set` recebe dois parâmetros: a chave que estamos aplicando e o valor. Muitos comando, mas não todos, recebem uma chave (e quando eles o fazem, a chave é frequentemente o primeiro parâmetro). Você pode imaginar como recuperar o valor? Espero que você diga (mas não se preocupe se não você não tinha certeza!)
 
 	get users:leto
 
-Go ahead and play with some other combinations. Keys and values are fundamental concepts, and the `get` and `set` commands are the simplest way to play with them. Create more users, try different types of keys, try different values.
+Vá em frente e teste algumas outras combinações. Chaves e valores são conceitos fundamentais, e os comandos `get` e `set` são a forma mais simples de testá-los. Crie mais usuários, tente tipos diferentes de chaves, tente valores diferentes.
 
 ## Querying
 
@@ -585,7 +585,7 @@ Rather than implementing paging through a `limit` and `offset`, `scan` uses a `c
 
     scan 0 match bugs:* count 20
 
-As part of its reply, `scan` returns the next cursor to use. Alternatively, scan returns `0` to signify the end of results. Note that the next cursor value doesn't correspond to the result number or anything else which clients might consider useful. 
+As part of its reply, `scan` returns the next cursor to use. Alternatively, scan returns `0` to signify the end of results. Note that the next cursor value doesn't correspond to the result number or anything else which clients might consider useful.
 
 A typical flow might look like this:
 
@@ -646,7 +646,7 @@ The above code gets the details for all of Leto's male friends. Notice that to c
 If you are new to Lua, you should go over each line carefully. It might be useful to know that `{}` creates an empty `table` (which can act as either an array or a dictionary), `#TABLE` gets the number of elements in the TABLE, and `..` is used to concatenate strings.
 
 `eval` actually take 4 parameters. The second parameter should actually be the number of keys; however the Ruby driver automatically creates this for us. Why is this needed? Consider how the above looks like when executed from the CLI:
-  
+
     eval "....." "friends:leto" "m"
     vs
     eval "....." 1 "friends:leto" "m"
@@ -703,7 +703,7 @@ The next chapter will talk about Redis administration and configuration in more 
 
 ## In This Chapter
 
-This chapter introduced Redis' Lua scripting capabilities. Like anything, this feature can be abused. However, used prudently in order to implement your own custom and focused commands, it won't only simplify your code, but will likely improve performance. Lua scripting is like almost every other Redis feature/command: you make limited, if any, use of it at first only to find yourself using it more and more every day. 
+This chapter introduced Redis' Lua scripting capabilities. Like anything, this feature can be abused. However, used prudently in order to implement your own custom and focused commands, it won't only simplify your code, but will likely improve performance. Lua scripting is like almost every other Redis feature/command: you make limited, if any, use of it at first only to find yourself using it more and more every day.
 
 # Chapter 6 - Administration
 
