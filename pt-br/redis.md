@@ -106,27 +106,29 @@ Essa é a anatomia básica de um comando do Redis. Primeiro nós temos o comando
 
 Vá em frente e teste algumas outras combinações. Chaves e valores são conceitos fundamentais, e os comandos `get` e `set` são as formas mais simples de testá-los. Crie mais usuários, tente tipos diferentes de chaves, tente valores diferentes.
 
-## Querying
+## Consultando
 
-As we move forward, two things will become clear. As far as Redis is concerned, keys are everything and values are nothing. Or, put another way, Redis doesn't allow you to query an object's values. Given the above, we can't find the user(s) which live on planet `dune`.
+À medida que avançamos, duas coisas vão se tonando claras. Quando se fala sobre o Redis, as chaves são tudo e os valores não são nada. Ou, colocado de outra forma, o Redis não permite a você consultar um valor do objeto. Diante disso, não podemos encontrar o usuário(s) que vive no planeta `dune`.
 
-For many, this will cause some concern. We've lived in a world where data querying is so flexible and powerful that Redis' approach seems primitive and unpragmatic. Don't let it unsettle you too much. Remember, Redis isn't a one-size-fits-all solution. There'll be things that just don't belong in there (because of the querying limitations). Also, consider that in some cases you'll find new ways to model your data.
+Para muitos, isso causará alguma preocupação. Nós vivemos em um mundo onde a consulta de dados é tão flexível e poderosa que a abordagem do Redis parece primitiva e não pragmática. Não deixe que isso o perturbe muito. Lembre-se, o Redis não é uma solução _one-size-fits-all_. Haverá coisas que apenas não pertencem ao seu domínio (por causa das limitações de busca). Além disso, considere que em alguns casos você procurará novas formas para modelar seus dados.
 
-We'll look at more concrete examples as we move on, but it's important that we understand this basic reality of Redis. It helps us understand why values can be anything - Redis never needs to read or understand them. Also, it helps us get our minds thinking about modeling in this new world.
+Encontraremos mais exemplos concretos à medida que avançamos, mas é importante que entendamos esta funcionalidade básica do Redis. Isso nos ajuda a entender porque valores podem ser qualquer coisa - o Redis nunca precisa ler ou entender esses valores. Além disso, esse fato nos ajuda a fazer nossas mentes começar a pensar como modelar nesse novo mundo.
 
-## Memory and Persistence
 
-We mentioned before that Redis is an in-memory persistent store. With respect to persistence, by default, Redis snapshots the database to disk based on how many keys have changed. You configure it so that if X number of keys change, then save the database every Y seconds. By default, Redis will save the database every 60 seconds if 1000 or more keys have changed all the way to 15 minutes if 9 or less keys has changed.
+## Memória e persistência
 
-Alternatively (or in addition to snapshotting), Redis can run in append mode. Any time a key changes, an append-only file is updated on disk. In some cases it's acceptable to lose 60 seconds worth of data, in exchange for performance, should there be some hardware or software failure. In some cases such a loss is not acceptable. Redis gives you the option. In chapter 6 we'll see a third option, which is offloading persistence to a slave.
+Mencionamos anteriormente que o Redis é um banco de dados com persistência em memória. A respeito de persistência, por padrão, o Redis faz cópias instantâneas (_snapshots_) do banco de dados no disco baseado na quantidade de chaves que são alteradas. Você o configura de modo que se X número de chaves mudar, então salva o banco de dados a cada Y segundos. Por padrão, o Redis vai salvar o banco de dados a cada 60 segundos se 1000 ou mais chaves forem alteradas, ou no máximo em 15 minutos se 9 chaves ou menos forem alteradas.
 
-With respect to memory, Redis keeps all your data in memory. The obvious implication of this is the cost of running Redis: RAM is still the most expensive part of server hardware.
+Alternativamente (ou em adição as cópias instantâneas), o Redis pode rodar em _append mode_. Toda vez que um chave for alterada, um arquivo _append-only_ é alterado no disco. Em alguns casos é aceitável perder 60 segundos de informação útil, em troca de desempenho, quando houver alguma falha no _hardware_ ou no _software_. em alguns casos essa perda de dados não é aceitável. O Redis lhe dá a opção. No capítulo 6 veremos a terceira opção, que é o descarremento de persistência para um escravo.
 
-I do feel that some developers have lost touch with how little space data can take. The Complete Works of William Shakespeare takes roughly 5.5MB of storage. As for scaling, other solutions tend to be IO- or CPU-bound. Which limitation (RAM or IO) will require you to scale out to more machines really depends on the type of data and how you are storing and querying it. Unless you're storing large multimedia files in Redis, the in-memory aspect is probably a non-issue. For apps where it is an issue you'll likely be trading being IO-bound for being memory bound.
+No que diz respeito à memória, o Redis mantém todos os seus dados em memória. A implicação óbvia disso é o custo para executar o Redis: RAM ainda é a parte mais cara do _hardware_ para servidores.
 
-Redis did add support for virtual memory. However, this feature has been seen as a failure (by Redis' own developers) and its use has been deprecated.
+Eu realmente sinto que alguns desenvolvedores perderam o tato em relação ao pequeno espaço que o dado ocupa. Todos os trabalhos completos de William Shakespeare ocupam grosseiramente 5.5MB de armazenamento. Quanto ao escalonamento, outras soluções tendem a ser IO- ou CPU-bound. A limitação (RAM ou IO) que vai exigir que você redimensione para mais máquinas realmente depende do tipo de dado e como você o armazena e consulta. A menos que você esteja armazenando arquivos de multimídia grandes no Redis, o aspecto _in-memory_ está provavelmente fora de questão. Para aplicações onde isso é um problema você provavelmente vai estar negociando entre limitações de IO (IO-bound) e limitações de memória (_memory bound_).
 
-(On a side note, that 5.5MB file of Shakespeare's complete works can be compressed down to roughly 2MB. Redis doesn't do auto-compression but, since it treats values as bytes, there's no reason you can't trade processing time for RAM by compressing/decompressing the data yourself.)
+
+O Redis adicionou suporte para memória virtual. Contudo, essa funcionalidade foi vista como um falha (pelos próprios desenvolvedores do Redis) e o seu uso foi depreciado.
+
+(Em um nota lateral, o arquivo de 5.5MB dos trabalhos completos de Shakespeare pode ser comprimidos para grosseiramente 2MB. O Redis não faz auto-compressão, mas, desde que trata valores como bytes, não há motivo para você gastar tempo de processamento para RAM através de compressão/descompressão dos seus próprios dados.)
 
 ## Putting It Together
 
