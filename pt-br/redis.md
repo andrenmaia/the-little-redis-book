@@ -170,6 +170,8 @@ Não há nada mais importante do que se divertir e experimentar as coisas. Você
 
 Strings are the most basic data structures available in Redis. When you think of a key-value pair, you are thinking of strings. Don't get mixed up by the name, as always, your value can be anything. I prefer to call them "scalars", but maybe that's just me.
 
+Strings é a estrutura de dados mais básica disponível no Redis. Quando você pensar em um par chave-valor, você está pensando em strings. Não misture os nomes, como sempre, seu valor pode ser nada. Eu prefiro chamá-lo de "escalar", mas talvez apenas eu.
+
 We already saw a common use-case for strings, storing instances of objects by key. This is something that you'll make heavy use of:
 
 	set users:leto "{name: leto, planet: dune, likes: [spice]}"
