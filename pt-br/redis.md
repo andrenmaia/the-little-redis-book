@@ -156,15 +156,15 @@ Os tópicos importantes desse capítulo são:
 
 * Combinados, os tópicos acima, faz o Redis rápido e fácil de usar, mas não é adequado para todos os cenários.
 
-# Chapter 2 - The Data Structures
+# Capítulo 2 - Estruturas de Dados
 
-It's time to look at Redis' five data structures. We'll explain what each data structure is, what methods are available and what type of feature/data you'd use it for.
+É hora de dar uma olhada nas cinco estruturas de dados do Redis. Explicaremos o que é cada estrutura de dados, quais métodos estão disponíveis e quais tipos de características/dados você utilizaria.
 
-The only Redis constructs we've seen so far are commands, keys and values. So far, nothing about data structures has been concrete. When we used the `set` command, how did Redis know what data structure to use? It turns out that every command is specific to a data structure. For example when you use `set` you are storing the value in a string data structure. When you use `hset` you are storing it in a hash. Given the small size of Redis' vocabulary, it's quite manageable.
+As únicas construções do Redis que vimos até o momento são comandos, chaves e valores. Até agora, nada sobre estruturas de dados tem sido concreto. Quando utilizamos o comando `set`, como o Redis sabia qual estrutura de dados utilizar? Acontece que todo comando é específico para uma estrutura de dados. Por exemplo quando você utiliza o comando `set` você está armazenando o valor em uma estrutura de dados `string`. Quando você usa `hset` você está armazenando o dado em um `hash`. Dada a pequena dimensão do vocabulário do Redis, ele é bastante manuseável.
 
-**[Redis' website](http://redis.io/commands) has great reference documentation. There's no point in repeating the work they've already done. We'll only cover the most important commands needed to understand the purpose of a data structure.**
+**[O site do Redis](http://redis.io/commands) tem uma ótima documentação de referência. Não há motivos para repetir o trabalho que eles já fizeram. Cobriremos apenas os comando mais importantes e necessários para entender o propósito das estruturas de dados.**
 
-There's nothing more important than having fun and trying things out. You can always erase all the values in your database by entering `flushdb`, so don't be shy and try doing crazy things!
+Não há nada mais importante do que se divertir e experimentar as coisas. Você sempre pode apagar todos os dados em sua base de dados informando o comando `flushdb`, então não seja tímido e tente fazer _doideiras_!
 
 ## Strings
 
