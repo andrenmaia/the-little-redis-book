@@ -168,16 +168,13 @@ Não há nada mais importante do que se divertir e experimentar as coisas. Você
 
 ## Strings
 
-Strings are the most basic data structures available in Redis. When you think of a key-value pair, you are thinking of strings. Don't get mixed up by the name, as always, your value can be anything. I prefer to call them "scalars", but maybe that's just me.
+Strings é a estrutura de dados mais básica disponível no Redis. Quando você pensa em um par chave-valor, você está pensando em strings. Não misture os nomes, como sempre, seu valor pode qualquer coisa. Eu prefiro chamá-los de "escalares", mas talvez apenas eu os chame assim.
 
-Strings é a estrutura de dados mais básica disponível no Redis. Quando você pensar em um par chave-valor, você está pensando em strings. Não misture os nomes, como sempre, seu valor pode ser nada. Eu prefiro chamá-lo de "escalar", mas talvez apenas eu.
-
-We already saw a common use-case for strings, storing instances of objects by key. This is something that you'll make heavy use of:
+Já vimos um caso de uso comum para strings, armazenando instâncias de objetos por chave. Isto é algo que você utilizará muito:
 
 	set users:leto "{name: leto, planet: dune, likes: [spice]}"
 
-Additionally, Redis lets you do some common operations. For example `strlen <key>` can be used to get the length of a key's value; `getrange <key> <start> <end>` returns the specified range of a value; `append <key> <value>` appends the value to the existing value (or creates it if it doesn't exist already). Go ahead and try those out. This is what I get:
-
+Além disso, o Redis deixar você fazer algumas operações comuns. Por exemplo `strlen <key>` pode ser usada para obter o tamanho de um valor de uma chave; `getrange <key> <start> <end>` retorna o _range_ especificado de um valor; `append <key> <value>` junta o valor a um valor existente (ou o cria se ele não existir ainda). Vá em frente e tente os comandos a seguir. Isto foi o que eu obtive:
 	> strlen users:leto
 	(integer) 42
 
@@ -187,9 +184,9 @@ Additionally, Redis lets you do some common operations. For example `strlen <key
 	> append users:leto " OVER 9000!!"
 	(integer) 54
 
-Now, you might be thinking, that's great, but it doesn't make sense. You can't meaningfully pull a range out of JSON or append a value. You are right, the lesson here is that some of the commands, especially with the string data structure, only make sense given specific type of data.
+Agora você deve estar pensando, isto é ótimo, mas não faz sentido. Você não pode pegar, de forma significativa, um _range_ de um JSON ou juntar um valor. Você está certo, a lição aqui é que alguns dos comandos, especialmente com a estrutura de dados string, só faz sentido quando dado um tipo específico de dado.
 
-Earlier we learnt that Redis doesn't care about your values. Most of the time that's true. However, a few string commands are specific to some types or structure of values. As a vague example, I could see the above `append` and `getrange` commands being useful in some custom space-efficient serialization. As a more concrete example I give you the `incr`, `incrby`, `decr` and `decrby` commands. These increment or decrement the value of a string:
+Anteriormente aprendemos que o Redis não se importa com seus valores. Na maioria das vezes isso é verdade. Contudo, alguns comandos de string são específicos para alguns tipos ou estruturas de valores. Como um exemplo vago, poderia ver o exemplo acima, os comandos `append` e `getrange`, sendo usados em alguma forma de serialização eficiente para armazenamento customizada. Para um exemplo mais concreto execute os comandos `incr`, `incrby`, `decr` e `decrby`. Esses incrementam ou decrementam os valores de uma string:
 
 	> incr stats:page:about
 	(integer) 1
@@ -201,11 +198,12 @@ Earlier we learnt that Redis doesn't care about your values. Most of the time th
 	> incrby ratings:video:12333 3
 	(integer) 8
 
-As you can imagine, Redis strings are great for analytics. Try incrementing `users:leto` (a non-integer value) and see what happens (you should get an error).
 
-A more advanced example is the `setbit` and `getbit` commands. There's a [wonderful post](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/) on how Spool uses these two commands to efficiently answer the question "how many unique visitors did we have today". For 128 million users a laptop generates the answer in less than 50ms and takes only 16MB of memory.
+Como você pode imaginar, as strings do Redis são ótimas para _analytics_. Tente incrementar `users:leto` (um valor não inteiro) e veja o que acontece (você de obter um erro).
 
-It isn't important that you understand how bitmaps work, or how Spool uses them, but rather to understand that Redis strings are more powerful than they initially seem. Still, the most common cases are the ones we gave above: storing objects (complex or not) and counters. Also, since getting a value by key is so fast, strings are often used to cache data.
+Um exemplo mais avançado são os comandos `setbit` e o `getbit`. Existe um [ótimo post](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/) de como os usuários do Spool usam esses dois comandos para responder de forma eficiente a questão "quantos visitantes únicos tivemos hoje". Para 128 milhões de usuários um laptop gerou a resposta em menos de 50ms e ocupou apenas 16MB de memória.
+
+Não é importante que você entenda como _bitmaps_ funcionam, ou como os usuários do Spool os utilizam, mas sim entender que as strings do Redis são mais poderosas do que elas inicialmente parecem ser. Ainda, os casos mais comum são aqueles que mostramos acima: armazenar objetos (complexos ou não) e contadores. Além disso, obter um valor pela chave é tão rápido que string são frequentemente utilizadas para armazenar dados de cache.
 
 ## Hashes
 
