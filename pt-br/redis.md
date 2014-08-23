@@ -207,12 +207,12 @@ Não é importante que você entenda como _bitmaps_ funcionam, ou como os usuár
 
 ## Hashes
 
-Hashes are a good example of why calling Redis a key-value store isn't quite accurate. You see, in a lot of ways, hashes are like strings. The important difference is that they provide an extra level of indirection: a field. Therefore, the hash equivalents of `set` and `get` are:
+Hashes são um bom exemplo do porque chamar o Redis um banco de dados chave-valor não é muito preciso. Você sabe, em uma séries de formas, hashes são como strings. A diferença importante é que eles provem um nível extra de indireção: um campo. Portanto, os equivalentes de `set` e `get` para o hash são:
 
 	hset users:goku powerlevel 9000
 	hget users:goku powerlevel
 
-We can also set multiple fields at once, get multiple fields at once, get all fields and values, list all the fields or delete a specific field:
+Nós também podemos aplicar valores para múltiplos campos de uma só vez, obter múltiplos campos, obtém todos os campos e valores, listar todos os campos ou apagar um campo específico:
 
 	hmset users:goku race saiyan age 737
 	hmget users:goku race powerlevel
@@ -220,9 +220,9 @@ We can also set multiple fields at once, get multiple fields at once, get all fi
 	hkeys users:goku
 	hdel users:goku age
 
-As you can see, hashes give us a bit more control over plain strings. Rather than storing a user as a single serialized value, we could use a hash to get a more accurate representation. The benefit would be the ability to pull and update/delete specific pieces of data, without having to get or write the entire value.
+Como você pode perceber, hashes nos dão um pouco mais de controle sobre strings simples. Ao invés de armazenarmos um usuário como uma único valor serializado, nós podemos usar um hash para obter uma representação mais precisa. O benefício seria a habilidade de enviar tudo para o Redis e atualizar/apagar pedaços de dados específicos, sem ter que obter ou atualizar todos os valores.
 
-Looking at hashes from the perspective of a well-defined object, such as a user, is key to understanding how they work. And it's true that, for performance reasons, more granular control might be useful. However, in the next chapter we'll look at how hashes can be used to organize your data and make querying more practical. In my opinion, this is where hashes really shine.
+Observar hashes a partir de uma perspectiva de objeto bem definido, como um usuário, é a chave para entender como eles funcionam. E é verdade que, por motivos de performance, controle mais granular pode ser útil. No entanto, no próximo capítulo vamos ver como hashes podem ser utilizados para organizar seus dados e fazer consultas mais práticas. Na minha opinião, isso é o que faz os hashes realmente úteis.
 
 ## Lists
 
