@@ -224,14 +224,14 @@ Como você pode perceber, hashes nos dão um pouco mais de controle sobre string
 
 Observar hashes a partir de uma perspectiva de objeto bem definido, como um usuário, é a chave para entender como eles funcionam. E é verdade que, por motivos de performance, controle mais granular pode ser útil. No entanto, no próximo capítulo vamos ver como hashes podem ser utilizados para organizar seus dados e fazer consultas mais práticas. Na minha opinião, isso é o que faz os hashes realmente úteis.
 
-## Lists
+## Listas
 
-Lists let you store and manipulate an array of values for a given key. You can add values to the list, get the first or last value and manipulate values at a given index. Lists maintain their order and have efficient index-based operations. We could have a `newusers` list which tracks the newest registered users to our site:
+Listas permitem que você armazene e manipule um array de valores para uma chave dada. Você pode adicionar valores a lista, obter o primeiro ou o último valor e manipular valores para um índice. Listas mantém sua ordem e utilizam operações eficientes baseadas em índice. Nós podemos ter uma lista de  `newusers` na qual registra os usuários mais novos para nosso site:
 
 	lpush newusers goku
 	ltrim newusers 0 49
 
-First we push a new user at the front of the list, then we trim it so that it only contains the last 50 users. This is a common pattern. `ltrim` is an O(N) operation, where N is the number of values we are removing. In this case, where we always trim after a single insert, it'll actually have a constant performance of O(1) (because N will always be equal to 1).
+First we push a new user at the front of the list, then we trim it so that it only contains the last 50 users. This is a common pattern. `ltrim` is an O(N) operation, where N is the number of values we are removing. In this case, where we always trim after a single insert, it'll actually have a constant performance of O(1) (because N will always be equal to 1).  
 
 This is also the first time that we are seeing a value in one key referencing a value in another. If we wanted to get the details of the last 10 users, we'd do the following combination:
 
