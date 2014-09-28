@@ -240,31 +240,29 @@ Esta é a primeira vez que estamos vendo um valor em uma chave referenciando um 
 
 No código acima temos um pouco de Ruby, que nos mostra os múltiplos _roundtrips_ que falamos anteriormente.
 
-Of course, lists aren't only good for storing references to other keys. The values can be anything. You could use lists to store logs or track the path a user is taking through a site. If you were building a game, you might use one to track queued user actions.
-
 Claro, listas não são apenas boas para armazenar referências para outras chaves. Os valores podem ser qualquer coisa. Você poderia usar listas para armazenar _logs_ ou os passos de um usuário enquanto ele navega pelo site. Se você estiver construindo um jogo, você poderia usar uma lista para acompanhar as ações do usuário em uma fila. 
 
-## Sets
+## Conjuntos (Sets)
 
-Sets are used to store unique values and provide a number of set-based operations, like unions. Sets aren't ordered but they provide efficient value-based operations. A friend's list is the classic example of using a set:
+Conjuntos (ou em inglês Sets) são usados para armazenar valores únicos. Estes provem um número de operações baseadas em conjuntos matemáticos, como _união_ (_unions_). Conjuntos não são ordenados, mas eles provem operações baseadas em valores de forma eficiente. Um lista de amigos é um exemplo clássico do uso de conjuntos:
 
 	sadd friends:leto ghanima paul chani jessica
 	sadd friends:duncan paul jessica alia
 
-Regardless of how many friends a user has, we can efficiently tell (O(1)) whether userX is a friend of userY or not:
+Independentemente da quantidade de amigos que um usuário tenha, podemos dizer de forma eficiente (O(1)) se o usuárioX é amigo do usuárioY or não:
 
 	sismember friends:leto jessica
 	sismember friends:leto vladimir
 
-Furthermore we can see whether two or more people share the same friends:
+Além disso podemos ver se duas ou mais pessoas compartilham as mesmas amizades:
 
 	sinter friends:leto friends:duncan
 
-and even store the result at a new key:
+e ainda armazenar o resultado em uma nova chave:
 
 	sinterstore friends:leto_duncan friends:leto friends:duncan
 
-Sets are great for tagging or tracking any other properties of a value for which duplicates don't make any sense (or where we want to apply set operations such as intersections and unions).
+Conjuntos são ótimos para etiquetar (_tagging_) ou rastrear qualquer outra propriedade de um valor quando não faz nenhum sentido criar duplicidades (ou onde quisermos aplicar um conjunto de operações como uma intersecção e união).
 
 ## Sorted Sets
 
