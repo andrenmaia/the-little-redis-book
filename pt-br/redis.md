@@ -231,16 +231,18 @@ Listas permitem que você armazene e manipule um array de valores para uma chave
 	lpush newusers goku
 	ltrim newusers 0 49
 
-First we push a new user at the front of the list, then we trim it so that it only contains the last 50 users. This is a common pattern. `ltrim` is an O(N) operation, where N is the number of values we are removing. In this case, where we always trim after a single insert, it'll actually have a constant performance of O(1) (because N will always be equal to 1).  
+Primeiro empurramos na lista, pela frente, um novo usuário, então nós aparamos a lista, assim ela contém apenas os últimos 50 usuários. Esse é um padrão comum. `ltrim` é uma operação O(N), onde N é o número de valores que estamos removendo. Neste caso, nós sempre aparamos após cada inserção, sendo assim, este terá sempre uma performance constante O(1) (porque N sempre será igual a 1). 
 
-This is also the first time that we are seeing a value in one key referencing a value in another. If we wanted to get the details of the last 10 users, we'd do the following combination:
+Esta é a primeira vez que estamos vendo um valor em uma chave referenciando um outro valor. Se quiséssemos obter os detalhes dos últimos 10 usuários, executaríamos a cominação a seguir:
 
 	ids = redis.lrange('newusers', 0, 9)
 	redis.mget(*ids.map {|u| "users:#{u}"})
 
-The above is a bit of Ruby which shows the type of multiple roundtrips we talked about before.
+No código acima temos um pouco de Ruby, que nos mostra os múltiplos _roundtrips_ que falamos anteriormente.
 
 Of course, lists aren't only good for storing references to other keys. The values can be anything. You could use lists to store logs or track the path a user is taking through a site. If you were building a game, you might use one to track queued user actions.
+
+Claro, listas não são apenas boas para armazenar referências para outras chaves. Os valores podem ser qualquer coisa. Você poderia usar listas para armazenar _logs_ ou os passos de um usuário enquanto ele navega pelo site. Se você estiver construindo um jogo, você poderia usar uma lista para acompanhar as ações do usuário em uma fila. 
 
 ## Sets
 
