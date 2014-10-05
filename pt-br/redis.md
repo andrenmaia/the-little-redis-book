@@ -264,25 +264,25 @@ e ainda armazenar o resultado em uma nova chave:
 
 Conjuntos são ótimos para etiquetar (_tagging_) ou rastrear qualquer outra propriedade de um valor quando não faz nenhum sentido criar duplicidades (ou onde quisermos aplicar um conjunto de operações como uma intersecção e união).
 
-## Sorted Sets
+## Conjunto ordenados (Sorted Sets)
 
-The last and most powerful data structure are sorted sets. If hashes are like strings but with fields, then sorted sets are like sets but with a score. The score provides sorting and ranking capabilities. If we wanted a ranked list of friends, we might do:
+A última e mais poderosa estrutura de dados são os conjuntos ordenados (sorted sets). Se _hashes_ são como strings com campos, então conjuntos ordenados são como conjuntos com um contador. O contador prove ordenação e ranqueamento dos conjuntos. Se nós quisermos uma lista ranqueada de amigos, nós podemos utilizar o comando a seguir:
 
 	zadd friends:duncan 70 ghanima 95 paul 95 chani 75 jessica 1 vladimir
 
-Want to find out how many friends `duncan` has with a score of 90 or over?
+Para procurar quantos amigos `ducan` tem com uma pontuação 90 ou superior? 
 
 	zcount friends:duncan 90 100
 
-How about figuring out `chani`'s rank?
+Que tal descobrir a pontuação de `chani`?
 
 	zrevrank friends:duncan chani
 
-We use `zrevrank` instead of `zrank` since Redis' default sort is from low to high (but in this case we are ranking from high to low). The most obvious use-case for sorted sets is a leaderboard system. In reality though, anything you want sorted by an some integer, and be able to efficiently manipulate based on that score, might be a good fit for a sorted set.
+Usamos `zrevrank` ao invés de `zrank` porque a ordenação padrão do Redis é do menor para o maior (mas neste caso estamos ordenando do maior para o menor). O caso de uso mais óbvio para conjuntos ordenados é um sistema de tabela de classificação. Na realidade, porém, qualquer coisa que você quiser ordenar por um valor inteiro, e ser capaz de manipular eficientemente baseado nessa ordenação, pode ser um bom candidato para um conjunto ordenado.
 
-## In This Chapter
+## Neste capítulo
 
-That's a high level overview of Redis' five data structures. One of the neat things about Redis is that you can often do more than you first realize. There are probably ways to use string and sorted sets that no one has thought of yet. As long as you understand the normal use-case though, you'll find Redis ideal for all types of problems. Also, just because Redis exposes five data structures and various methods, don't think you need to use all of them. It isn't uncommon to build a feature while only using a handful of commands.
+Esta foi uma visão geral de alto nível das cinco estruturas de dados do Redis. Uma das coisa legais sobre o Redis é que você pode fazer mais do que você imagina inicialmente. Existem, provavelmente, jeitos de usar _strings_ e conjuntos ordenados que ninguém pensou ainda. Contanto que você entenda o caso de uso normal, você vai achar o Redis ideal para todos os tipos de problemas. Além disso, só porque o Redis expõe cinco estruturas de dados e vários métodos, não ache que você precisa usar todos eles. Não é incomum construir uma funcionalidade utilizando um vários comandos.
 
 # Chapter 3 - Leveraging Data Structures
 
