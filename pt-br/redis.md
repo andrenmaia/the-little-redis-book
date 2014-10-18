@@ -284,19 +284,19 @@ Usamos `zrevrank` ao invés de `zrank` porque a ordenação padrão do Redis é 
 
 Esta foi uma visão geral de alto nível das cinco estruturas de dados do Redis. Uma das coisa legais sobre o Redis é que você pode fazer mais do que você imagina inicialmente. Existem, provavelmente, jeitos de usar _strings_ e conjuntos ordenados que ninguém pensou ainda. Contanto que você entenda o caso de uso normal, você vai achar o Redis ideal para todos os tipos de problemas. Além disso, só porque o Redis expõe cinco estruturas de dados e vários métodos, não ache que você precisa usar todos eles. Não é incomum construir uma funcionalidade utilizando um vários comandos.
 
-# Chapter 3 - Leveraging Data Structures
+# Capítulo 3 - Aproveitando as estruturas de dados
 
-In the previous chapter we talked about the five data structures and gave some examples of what problems they might solve. Now it's time to look at a few more advanced, yet common, topics and design patterns.
+No capítulo anterior falamos sobre as cinco estruturas de dados e demos alguns exemplos de quais problemas elas podem resolver. Agora é hora de darmos uma olhada em tópicos um pouco mais avançados, ainda comums, e também em alguns padrões de design.
 
-## Big O Notation
+## Notação Grande-O (Big O)
 
-Throughout this book we've made references to the Big O notation in the form of O(n) or O(1). Big O notation is used to explain how something behaves given a certain number of elements. In Redis, it's used to tell us how fast a command is based on the number of items we are dealing with.
+Ao longo deste livro fizemos referência a notação Grande-O (Big O), na forma O(n) ou O(1). A notação Grande-O é usada para explicar como alguma coisa se comporta dando um certo numero de elementos. No Redis, é usado para dizer-nos o quão rápido é um comando baseado no número de itens que estamos lidando.
 
-Redis documentation tells us the Big O notation for each of its commands. It also tells us what the factors are that influence the performance. Let's look at some examples.
+A documentação do Redis nos diz a notação Grande-O para cada um dos comandos. Também nos diz quais fatores influenciam na performance. Vamos dar uma olhada em alguns exemplos.
 
-The fastest anything can be is O(1) which is a constant. Whether we are dealing with 5 items or 5 million, you'll get the same performance. The `sismember` command, which tells us if a value belongs to a set, is O(1). `sismember` is a powerful command, and its performance characteristics are a big reason for that. A number of Redis commands are O(1).
+O mais rápido que qualquer coisa pode ser é O(1), que é constante. Se nós estamos lidando com 5 itens ou 5 milhões de itens, você obterá a mesma performance. O comando `sismember`, que nos diz se um valor pertence a um conjunto, é O(1). `sismember` é um comando poderoso, e suas características de performance são a grande razão para isso. O número de comandos do Redis é O(1).
 
-Logarithmic, or O(log(N)), is the next fastest possibility because it needs to scan through smaller and smaller partitions. Using this type of divide and conquer approach, a very large number of items quickly gets broken down in a few iterations. `zadd` is a O(log(N)) command, where N is the number of elements already in the sorted set.
+Logarítmico, ou O(log(N)), é o próximo mais rápido possível, porque ele precisa percorrer partições menores e menores. Usando esse tipo de abordagem de dividir e conquistar, um número grande de itens rapidamente é dividido em poucas iterações. `zadd` é um comando O(log(N)), onde N é o número de elementos presentes em um conjunto ordenado.
 
 Next we have linear commands, or O(N). Looking for a non-indexed column in a table is an O(N) operation. So is using the `ltrim` command. However, in the case of `ltrim`, N isn't the number of elements in the list, but rather the elements being removed. Using `ltrim` to remove 1 item from a list of millions will be faster than using `ltrim` to remove 10 items from a list of thousands. (Though they'll probably both be so fast that you wouldn't be able to time it.)
 
