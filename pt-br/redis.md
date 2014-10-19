@@ -298,16 +298,15 @@ O mais rápido que qualquer coisa pode ser é O(1), que é constante. Se nós es
 
 Logarítmico, ou O(log(N)), é o próximo mais rápido possível, porque ele precisa percorrer partições menores e menores. Usando esse tipo de abordagem de dividir e conquistar, um número grande de itens rapidamente é dividido em poucas iterações. `zadd` é um comando O(log(N)), onde N é o número de elementos presentes em um conjunto ordenado.
 
-Next we have linear commands, or O(N). Looking for a non-indexed column in a table is an O(N) operation. So is using the `ltrim` command. However, in the case of `ltrim`, N isn't the number of elements in the list, but rather the elements being removed. Using `ltrim` to remove 1 item from a list of millions will be faster than using `ltrim` to remove 10 items from a list of thousands. (Though they'll probably both be so fast that you wouldn't be able to time it.)
+A segui temos os comandos lineares, ou O(N). A busca em uma coluna não indexada em uma tabela é uma operação O(N). Isso é feito utilizando o comando `ltrim`. Contudo, no caso do `ltrim`, N não é o número de elementos em uma lista, mas sim os elementos que estão sendo removidos. Usar `ltrim` para remover 1 item de uma lista de milhões será mais rápido do que usar `ltrim` para remover 10 itens de uma lista de milhares de itens. (Embora ambos os comandos serão provavelmente tão rápidos que você não seria capaz de cronometra-los).
 
-`zremrangebyscore` which removes elements from a sorted set with a score between a minimum and a maximum value has a complexity of O(log(N)+M). This makes it a mix. By reading the documentation we see that N is the number of total elements in the set and M is the number of elements to be removed. In other words, the number of elements that'll get removed is probably going to be more significant, in terms of performance, than the total number of elements in the set.
+`zremrangebyscore` que remove elementos de um conjunto ordenado com uma pontuação entre um valor mínimo e máximo tem uma complexidade de O(log(N)+M). Esse faz uma mistura. Lendo a documentação podemos ver que N é o número total de elementos no conjunto e M é o número de elementos a serem removidos. Em outras palavras, o número de elementos que serão removidos vai provavelmente ser mais significante, em termos de performance, do que o número total de elementos no conjunto.
 
-The `sort` command, which we'll discuss in greater detail in the next chapter has a complexity of O(N+M*log(M)). From its performance characteristic, you can probably tell that this is one of Redis' most complex commands.
+O comando `sort`, que discutiremos em grande detalhe no próximo capítulo tem uma complexidade de O(N+M*log(M)). De sua característica de performance, você pode provavelmente dizer que este é um dos comandos mais complexos do Redis. 
 
-There are a number of other complexities, the two remaining common ones are O(N^2) and O(C^N). The larger N is, the worse these perform relative to a smaller N. None of Redis' commands have this type of complexity.
+Existem outros números de complexidades, os dois restante mais comuns são O(N^2) e O(C^N). Quanto maior o N, pior é sua performance relativa ao menor N. Nenhum dos comandos do Redis tem este tipo de complexidade.
 
-It's worth pointing out that the Big O notation deals with the worst case. When we say that something takes O(N), we might actually find it right away or it might be the last possible element.
-
+É importante ressaltar que a notação Grande-O lida com o pior caso. Quando dizemos que alguma coisa leva O(N) para executar, nós na verdade podemos encontrá-lo imediatamente ou ele pode ser o último elemento possível.
 
 ## Pseudo Multi Key Queries
 
