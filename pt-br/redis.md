@@ -310,30 +310,30 @@ Existem outros números de complexidades, os dois restante mais comuns são O(N^
 
 ## Pseudo Multi Key Queries
 
-A common situation you'll run into is wanting to query the same value by different keys. For example, you might want to get a user by email (for when they first log in) and also by id (after they've logged in). One horrible solution is to duplicate your user object into two string values:
+Uma situação comum que você vai enfrentar, é buscar o mesmo valor por chaves diferentes. Por exemplo, você pode querer obter um usuário por e-mail (para quando ele logar a primeira vez) e também por id (após ele ter logado). Uma solução horrível é duplicar o objeto de usuário em dois valores:
 
-	set users:leto@dune.gov "{id: 9001, email: 'leto@dune.gov', ...}"
-	set users:9001 "{id: 9001, email: 'leto@dune.gov', ...}"
+  set users:leto@dune.gov "{id: 9001, email: 'leto@dune.gov', ...}"
+  set users:9001 "{id: 9001, email: 'leto@dune.gov', ...}"
 
-This is bad because it's a nightmare to manage and it takes twice the amount of memory.
+Isso é ruim porque é um pesadelo gerenciar e ocupa o dobro de memória.
 
-It would be nice if Redis let you link one key to another, but it doesn't (and it probably never will). A major driver in Redis' development is to keep the code and API clean and simple. The internal implementation of linking keys (there's a lot we can do with keys that we haven't talked about yet) isn't worth it when you consider that Redis already provides a solution: hashes.
+Seria legal se o Redis permitisse ligar uma chave a outra, mas isso não é possível (e provavelmente nunca será). Um dos principais motores do desenvilvimento do Redis é manter o código limpo e simples. A implementação interna de ligação de chaves (existem muitas coisas que podemos fazer com chaves que ainda não falamos) não vale a pena quando consideramos que o Redis já provê uma solução: hashes.
 
-Using a hash, we can remove the need for duplication:
+Usando um hash, podemos remover a necessidade de duplicacão:
 
-	set users:9001 "{id: 9001, email: leto@dune.gov, ...}"
-	hset users:lookup:email leto@dune.gov 9001
+  set users:9001 "{id: 9001, email: leto@dune.gov, ...}"
+  hset users:lookup:email leto@dune.gov 9001
 
-What we are doing is using the field as a pseudo secondary index and referencing the single user object. To get a user by id, we issue a normal `get`:
+O que estamos fazendo é utilizar o campo como um pseudo índice secundário e referenciando um único objeto de usuário.
 
-	get users:9001
+  get users:9001
 
-To get a user by email, we issue an `hget` followed by a `get` (in Ruby):
+Para obter um usuário por e-mail, executamos um `hget` seguido de um `get` (em Ruby):
 
-	id = redis.hget('users:lookup:email', 'leto@dune.gov')
-	user = redis.get("users:#{id}")
+  id = redis.hget('users:lookup:email', 'leto@dune.gov')
+  user = redis.get("users:#{id}")
 
-This is something that you'll likely end up doing often. To me, this is where hashes really shine, but it isn't an obvious use-case until you see it.
+Isso é algo que você provavelmente vai acabar fazendo muitas vezes. Para mim, isso é onde os hashes realmente brilhão, mas não é um caso de uso óbvio até que você o veja.
 
 ## References and Indexes
 
