@@ -355,7 +355,7 @@ Se você verdadeiramente está pensando sobre isso, saiba que, bancos de dados r
 
 Novamente, ter que lidar manualmente com referências no Redis é desagradável. Mas qualquer preocupações iniciar que você tenha sobre performance ou implicações de memória devem ser testadas. Acho que você não vai considerar isso um problema.
 
-## Round Trips and Pipelining
+## Round Trips e Pipelining
 
 Já mencionamos que fazer viagens (trips) frequentes ao servidor é um padrão comum no Redis. Dado que é uma coisa que você vai fazer frequentemente, vale a pena dar uma olhada mais de perto nos recursos que temos para aproveitar ao máximo desse padrão.
 
