@@ -357,23 +357,23 @@ Novamente, ter que lidar manualmente com referências no Redis é desagradável.
 
 ## Round Trips and Pipelining
 
-We already mentioned that making frequent trips to the server is a common pattern in Redis. Since it is something you'll do often, it's worth taking a closer look at what features we can leverage to get the most out of it.
+Já mencionamos que fazer viagens (trips) frequentes ao servidor é um padrão comum no Redis. Dado que é uma coisa que você vai fazer frequentemente, vale a pena dar uma olhada mais de perto nos recursos que temos para aproveitar ao máximo desse padrão.
 
-First, many commands either accept one or more set of parameters or have a sister-command which takes multiple parameters. We saw `mget` earlier, which takes multiple keys and returns the values:
+Muitos comandos aceitam um ou mais conjuntos de parâmetros ou tem um _comando-irmão_ que leva vários parâmetro. Vimos o `mget` anteriormente, que aceita múltiplas chaves e retorna os valores:
 
 	keys = redis.lrange('newusers', 0, 10)
 	redis.mget(*keys.map {|u| "users:#{u}"})
 
-Or the `sadd` command which adds 1 or more members to a set:
+Ou o comando  `sadd` que adiciona 1 ou mais membros a um conjunto:
 
 	sadd friends:vladimir piter
 	sadd friends:paul jessica leto "leto II" chani
 
-Redis also supports pipelining. Normally when a client sends a request to Redis it waits for the reply before sending the next request. With pipelining you can send a number of requests without waiting for their responses. This reduces the networking overhead and can result in significant performance gains.
+O Redis também suporta _pipelining_. Normalmente quanto um cliente envia uma requisição ao Redis, ele aguarda pela resposta antes de enviar a próxima requisição. Com _pipelining_ você pode enviar um número de requisições sem aguardar pelas respostas. Isso reduz a sobrecarga de rede e pode resultar em um significante ganho de memória.
 
-It's worth noting that Redis will use memory to queue up the commands, so it's a good idea to batch them. How large a batch you use will depend on what commands you are using, and more specifically, how large the parameters are. But, if you are issuing commands against ~50 character keys, you can probably batch them in thousands or tens of thousands.
+É importante notar que o Redis usará memória para enfileirar os comandos, então é uma boa idéia criar enviá-los em lote. O tamanho do lote que você vai usar dependerá de qual comando você escolher, e mais especificamente, do tamanho dos parâmetros. Mas, se você está executando comandos de aproximadamente 50 caracteres, você pode provavelmente criar lotes deles em milhares ou dezenas de milhares.
 
-Exactly how you execute commands within a pipeline will vary from driver to driver. In Ruby you pass a block to the `pipelined` method:
+Exatamente como você executa comando dentro de um _pipeline_ vai variar de driver para driver. No Ruby você passa um bloco de métodos `pipelined`:
 
 	redis.pipelined do
 	  9001.times do
@@ -381,7 +381,7 @@ Exactly how you execute commands within a pipeline will vary from driver to driv
 	  end
 	end
 
-As you can probably guess, pipelining can really speed up a batch import!
+Como você provavelmente deve imaginar, _pipeling_ pode realmente aumentar a velocidade na importação de um lote!
 
 ## Transactions
 
