@@ -175,6 +175,7 @@ Já vimos um caso de uso comum para strings, armazenando instâncias de objetos 
 	set users:leto "{name: leto, planet: dune, likes: [spice]}"
 
 Além disso, o Redis deixar você fazer algumas operações comuns. Por exemplo `strlen <key>` pode ser usada para obter o tamanho de um valor de uma chave; `getrange <key> <start> <end>` retorna o _range_ especificado de um valor; `append <key> <value>` junta o valor a um valor existente (ou o cria se ele não existir ainda). Vá em frente e tente os comandos a seguir. Isto foi o que eu obtive:
+
 	> strlen users:leto
 	(integer) 42
 
@@ -312,26 +313,27 @@ Existem outros números de complexidades, os dois restante mais comuns são O(N^
 
 Uma situação comum que você vai enfrentar, é buscar o mesmo valor por chaves diferentes. Por exemplo, você pode querer obter um usuário por e-mail (para quando ele logar a primeira vez) e também por id (após ele ter logado). Uma solução horrível é duplicar o objeto de usuário em dois valores:
 
-  set users:leto@dune.gov "{id: 9001, email: 'leto@dune.gov', ...}"
-  set users:9001 "{id: 9001, email: 'leto@dune.gov', ...}"
-
+	set users:leto@dune.gov "{id: 9001, email: 'leto@dune.gov', ...}"
+	set users:9001 "{id: 9001, email: 'leto@dune.gov', ...}"
+	
 Isso é ruim porque é um pesadelo gerenciar e ocupa o dobro de memória.
 
 Seria legal se o Redis permitisse ligar uma chave a outra, mas isso não é possível (e provavelmente nunca será). Um dos principais motores do desenvilvimento do Redis é manter o código limpo e simples. A implementação interna de ligação de chaves (existem muitas coisas que podemos fazer com chaves que ainda não falamos) não vale a pena quando consideramos que o Redis já provê uma solução: hashes.
 
 Usando um hash, podemos remover a necessidade de duplicacão:
 
-  set users:9001 "{id: 9001, email: leto@dune.gov, ...}"
-  hset users:lookup:email leto@dune.gov 9001
+	set users:9001 "{id: 9001, email: leto@dune.gov, ...}"
+	hset users:lookup:email leto@dune.gov 9001
+
 
 O que estamos fazendo é utilizar o campo como um pseudo índice secundário e referenciando um único objeto de usuário.
 
-  get users:9001
+	get users:9001
 
 Para obter um usuário por e-mail, executamos um `hget` seguido de um `get` (em Ruby):
 
-  id = redis.hget('users:lookup:email', 'leto@dune.gov')
-  user = redis.get("users:#{id}")
+	id = redis.hget('users:lookup:email', 'leto@dune.gov')
+	user = redis.get("users:#{id}")
 
 Isso é algo que você provavelmente vai acabar fazendo muitas vezes. Para mim, isso é onde os hashes realmente brilhão, mas não é um caso de uso óbvio até que você o veja.
 
