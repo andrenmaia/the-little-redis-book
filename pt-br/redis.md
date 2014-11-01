@@ -335,23 +335,23 @@ Para obter um usuário por e-mail, executamos um `hget` seguido de um `get` (em 
 
 Isso é algo que você provavelmente vai acabar fazendo muitas vezes. Para mim, isso é onde os hashes realmente brilhão, mas não é um caso de uso óbvio até que você o veja.
 
-## References and Indexes
+## Referências e Índices
 
-We've seen a couple examples of having one value reference another. We saw it when we looked at our list example, and we saw it in the section above when using hashes to make querying a little easier. What this comes down to is essentially having to manually manage your indexes and references between values. Being honest, I think we can say that's a bit of a downer, especially when you consider having to manage/update/delete these references manually. There is no magic solution to solving this problem in Redis.
+Já vimos alguns exemplos de um valor referenciando o outro. Vimos isso quando demos uma olhada no nosso exemplo de lista, e também vimos a cima quando usamos hashes para fazer consultas um pouco mais fáceis. Isso nos resume que é essencial ter que gerenciar manualmente seus índices e referências entre valores. Para ser honesto, eu acho que podemos dizer que isso é meio chato, especialmente quando você considerar que terá que gerenciar/atualizar/deletar essas referências manualmente. Não há solição mágica para resolver esse problema no Redis.
 
-We already saw how sets are often used to implement this type of manual index:
+Nós já vimos como os conjuntos (sets) são usados com frequência para implementar esse tipo de índice manual:
 
 	sadd friends:leto ghanima paul chani jessica
 
-Each member of this set is a reference to a Redis string value containing details on the actual user. What if `chani` changes her name, or deletes her account? Maybe it would make sense to also track the inverse relationships:
+Cada membro desse conjunto é uma referência para um valor string do Redis contendo detalhes do usuário atual. E se `chani` mudar o nome dela, ou deletar sua conta? Talvez faça sentido também manter a trilha inversa do relacionamento:
 
 	sadd friends_of:chani leto paul
 
-Maintenance cost aside, if you are anything like me, you might cringe at the processing and memory cost of having these extra indexed values. In the next section we'll talk about ways to reduce the performance cost of having to do extra round trips (we briefly talked about it in the first chapter).
+A manutenção é um custo à parte, se você é como eu, você pode se assustar com o custo do processamento e memória por ter esses valores a mais indexados. Nesta secão falaremos sobre as formas de reduzir o custo de performance quando temos round trips a mais (nós falamos brevemente sobre isso no primeiro capítulo).
 
-If you actually think about it though, relational databases have the same overhead. Indexes take memory, must be scanned or ideally seeked and then the corresponding records must be looked up. The overhead is neatly abstracted away (and they  do a lot of optimizations in terms of the processing to make it very efficient).
+Se você verdadeiramente está pensando sobre isso, saiba que, bancos de dados relacionais têm a mesma sobrecarga. Índices usam memória. Eles devem ser escaneados, ou de preferência procurados, e então o registro que corresponde a busca deve ser encontrado. A sobrecarga é nitidamente abstraída (e ele faz um monte de otimizações em termos de processamento para deixá-lo muito eficiente).
 
-Again, having to manually deal with references in Redis is unfortunate. But any initial concerns you have about the performance or memory implications of this should be tested. I think you'll find it a non-issue.
+Novamente, ter que lidar manualmente com referências no Redis é desagradável. Mas qualquer preocupações iniciar que você tenha sobre performance ou implicações de memória devem ser testadas. Acho que você não vai considerar isso um problema.
 
 ## Round Trips and Pipelining
 
