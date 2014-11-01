@@ -339,7 +339,7 @@ Isso é algo que você provavelmente vai acabar fazendo muitas vezes. Para mim, 
 
 ## Referências e Índices
 
-Já vimos alguns exemplos de um valor referenciando o outro. Vimos isso quando demos uma olhada no nosso exemplo de lista, e também vimos a cima quando usamos hashes para fazer consultas um pouco mais fáceis. Isso nos resume que é essencial ter que gerenciar manualmente seus índices e referências entre valores. Para ser honesto, eu acho que podemos dizer que isso é meio chato, especialmente quando você considerar que terá que gerenciar/atualizar/deletar essas referências manualmente. Não há solição mágica para resolver esse problema no Redis.
+Já vimos alguns exemplos de um valor referenciando o outro. Vimos isso quando demos uma olhada no nosso exemplo de lista, e também vimos acima quando usamos hashes para fazer consultas um pouco mais fáceis. Isso nos resume que é essencial ter que gerenciar manualmente seus índices e referências entre valores. Para ser honesto, eu acho que podemos dizer que isso é meio chato, especialmente quando você considerar que terá que gerenciar/atualizar/deletar essas referências manualmente. Não há solução mágica para resolver esse problema no Redis.
 
 Nós já vimos como os conjuntos (sets) são usados com frequência para implementar esse tipo de índice manual:
 
@@ -383,41 +383,41 @@ Exatamente como você executa comando dentro de um _pipeline_ vai variar de driv
 
 Como você provavelmente deve imaginar, _pipeling_ pode realmente aumentar a velocidade na importação de um lote!
 
-## Transactions
+## Transações
 
-Every Redis command is atomic, including the ones that do multiple things. Additionally, Redis has support for transactions when using multiple commands.
+Todo comando no Redis é atômico, incluindo aqueles que fazem múltiplas coisas. Adicionalmente, o Redis tem suporte para transações quando usamos múltiplos comandos.
 
-You might not know it, but Redis is actually single-threaded, which is how every command is guaranteed to be atomic. While one command is executing, no other command will run. (We'll briefly talk about scaling in a later chapter.) This is particularly useful when you consider that some commands do multiple things. For example:
+Você pode não saber disso, mas o Redis é atualmente _single-threaded_, o que permite que todo comando seja garantidamente atômico. Enquanto um comando está em execução, nenhum outro comando será executado. (Falaremos brevemente sobre escalabilidade em um capítulo a frente.) Isso é particularmente útil quanto você considerar que alguns comandos fazem múltiplas coisas. Por exemplo:
 
-`incr` is essentially a `get` followed by a `set`
+`incr` é essencialmente um `get` seguido de um `set`.
 
-`getset` sets a new value and returns the original
+`getset` aplica um novo valor e retorna o valor original.
 
-`setnx` first checks if the key exists, and only sets the value if it does not
+`setnx` primeiro verifica se a chave existe, e apenas aplica o valor caso ela não exista.
 
-Although these commands are useful, you'll inevitably need to run multiple commands as an atomic group. You do so by first issuing the `multi` command, followed by all the commands you want to execute as part of the transaction, and finally executing `exec` to actually execute the commands or `discard` to throw away, and not execute the commands. What guarantee does Redis make about transactions?
+Apesar desses comandos serem úteis, você inevitavelmente precisará executar múltiplos comandos como um grupo atômico. É possível fazer isso primeiro executando o comando `multi`, seguido por todos os comandos que você deseja executar como parte de uma transação, e finalmente informar `exec` para executar os comandos informados anteriormente ou `discard` para jogá-los fora. Quais garantias o Redis faz sobre transações?
 
-* The commands will be executed in order
+* Os comandos serão executados em ordem;
 
-* The commands will be executed as a single atomic operation (without another client's command being executed halfway through)
+* Os Comandos serão executados como uma única operação atômica (sem outros comandos de clientes serem executados pela metade);
 
-* That either all or none of the commands in the transaction will be executed
+* Que todos ou nenhum dos comandos serão executados.
 
-You can, and should, test this in the command line interface. Also note that there's no reason why you can't combine pipelining and transactions.
+Você pode, e deve, testar isso na interface de linha de comando. Note também que não existe razão para não combinar _pipelining_ e transações. 
 
 	multi
 	hincrby groups:1percent balance -9000000000
 	hincrby groups:99percent balance 9000000000
 	exec
 
-Finally, Redis lets you specify a key (or keys) to watch and conditionally apply a transaction if the key(s) changed. This is used when you need to get values and execute code based on those values, all in a transaction. With the code above, we wouldn't be able to implement our own `incr` command since they are all executed together once `exec` is called. From code, we can't do:
+Finalmente, o Redis permite especificar uma chave (ou chaves) para monitorar e condicionalmente aplicar uma transação se a chave(s) mudar. Isso é usado quanto você precisa obter valores e executar um código com base nesses valores, tudo em uma transação. Com o código acima, nós não seriamos capazes de implementar nosso próprio comando `incr` desde que eles são todos executados juntos uma vez que `exec` é chamado. Do código, nós não podemos fazer:
 
 	redis.multi()
 	current = redis.get('powerlevel')
 	redis.set('powerlevel', current + 1)
 	redis.exec()
 
-That isn't how Redis transactions work. But, if we add a `watch` to `powerlevel`, we can do:
+Isso não é como as transações do Redis funcionam. Mas Se adicionássemos um `watch` para `powerlevel`,  poderíamos fazer:
 
 	redis.watch('powerlevel')
 	current = redis.get('powerlevel')
@@ -425,7 +425,7 @@ That isn't how Redis transactions work. But, if we add a `watch` to `powerlevel`
 	redis.set('powerlevel', current + 1)
 	redis.exec()
 
-If another client changes the value of `powerlevel` after we've called `watch` on it, our transaction will fail. If no client changes the value, the set will work. We can execute this code in a loop until it works.
+Se outro cliente alterar o valor de `powerlevel` após chamarmos o `watch` para ele, nossa transação falhará. Se o cliente não alterar o valor, o nosso `set` funcionará. Podemos executar esse código em _loop_ até que ele funcione.
 
 ## Keys Anti-Pattern
 
