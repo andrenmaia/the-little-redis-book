@@ -427,25 +427,24 @@ Isso não é como as transações do Redis funcionam. Mas Se adicionássemos um 
 
 Se outro cliente alterar o valor de `powerlevel` após chamarmos o `watch` para ele, nossa transação falhará. Se o cliente não alterar o valor, o nosso `set` funcionará. Podemos executar esse código em _loop_ até que ele funcione.
 
-## Keys Anti-Pattern
+## Anti-Pattern para chaves
 
-In the next chapter we'll talk about commands that aren't specifically related to data structures. Some of these are administrative or debugging tools. But there's one I'd like to talk about in particular: the `keys` command. This command takes a pattern and finds all the matching keys. This command seems like it's well suited for a number of tasks, but it should never be used in production code. Why? Because it does a linear scan through all the keys looking for matches. Or, put simply, it's slow.
+No próximo capítulo falaremos sobre comandos que não são especificamente relativos a estruturas de dados. Alguns deles são administrativos ou ferramentas de _debug_. Mas existe um comando que eu particularmente gostaria de falar: o comando `keys`. Esse comando usa como entrada um padrão e procura por todas as chaves que correspondem a este padrão. Ele parece ser útil para um grande número de tarefas, mas ele nunca deve ser utilizado em produção. Por quê? Porque ele faz uma busca linear através de todas as chaves para encontrar padrões compatíveis. Ou, simplesmente, ele é lerdo para ser utilizado em produção.
 
-How do people try and use it? Say you are building a hosted bug tracking service. Each account will have an `id` and you might decide to store each bug into a string value with a key that looks like `bug:account_id:bug_id`. If you ever need to find all of an account's bugs (to display them, or maybe delete them if they delete their account), you might be tempted (as I was!) to use the `keys` command:
+Como as pessoas utilizam esse comando? Digamos que você está construindo um serviço de _bug tracking_ local. Cada conta terá um `id` e você pode decidir armazenar cada _bug_ em um valor _string_ com uma chave parecida com `bug:account_id:bug_id`. Se você precisar encontrar todos os _bugs_ de uma conta (para exibi-los, ou talvez excluí-los se for excluir uma conta), você pode ficar tentado (como eu estava!) a utilizar o comando `keys`:
 
 	keys bug:1233:*
 
-The better solution is to use a hash. Much like we can use hashes to provide a way to expose secondary indexes, so too can we use them to organize our data:
+A melhor solução é utilizar um _hash_. Bem como podemos usar _hashes_ para prover um jeito de expor índices secundários, assim como podemos utilizá-los para organizar nossos dados:
 
 	hset bugs:1233 1 "{id:1, account: 1233, subject: '...'}"
 	hset bugs:1233 2 "{id:2, account: 1233, subject: '...'}"
 
-To get all the bug ids for an account we simply call `hkeys bugs:1233`. To delete a specific bug we can do `hdel bugs:1233 2` and to delete an account we can delete the key via `del bugs:1233`.
+Para obter todos os ids de _bug_ para uma conta nós simplesmente chamamos `hkeys bugs:1233`. Para excluir um _bug_ específico podemos executar o `hdel bugs:1233 2` e para excluir uma conta podemos excluir a chave através do comando `del bugs:1233`.
+ 
+## Neste capítulo
 
-
-## In This Chapter
-
-This chapter, combined with the previous one, has hopefully given you some insight on how to use Redis to power real features. There are a number of other patterns you can use to build all types of things, but the real key is to understand the fundamental data structures and to get a sense for how they can be used to achieve things beyond your initial perspective.
+Este capítulo, combinado com o anterior, permitiu a você ter alguns _insights_ de como utilizar o Redis para construir funcionalidades reais. Existem grandes números de outros padrões que você pode utilizar  para construir todo tipo de coisa, mas a chave é entender os fundamentos das estruturas de dados e ter uma noção de como elas podem ser usadas para atingir seus objetivos além de sua perspectiva inicial.
 
 # Chapter 4 - Beyond The Data Structures
 
