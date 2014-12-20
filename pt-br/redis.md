@@ -468,24 +468,23 @@ Finalmente, existe um comando especial para string, `setex` que deixa você apli
 
 	setex pages:about 30 '<h1>about us</h1>....'
 
-## Publication and Subscriptions
+## Publicações e assinaturas
 
-Redis lists have an `blpop` and `brpop` command which returns and removes the first (or last) element from the list or blocks until one is available. These can be used to power a simple queue.
+As listas do Redis têm dois comandos: `blpop` e `brpop`, que retornam e removem o primeiro (ou último) elemento de uma lista ou bloco até que um esteja disponível. Esses podem ser usados para alimentar uma fila simples.
 
-Beyond this, Redis has first-class support for publishing messages and subscribing to channels. You can try this out yourself by opening a second `redis-cli` window. In the first window subscribe to a channel (we'll call it `warnings`):
-
+Além disso, o Redis tem suporte de primeira classe para publicação de mensagens e assinatura de canais. Você pode testar abrindo uma segunda janela do `redis-cli`. Na primeira janela assine um canal (chamaremos de `warnings`):
+ 
 	subscribe warnings
 
-The reply is the information of your subscription. Now, in the other window, publish a message to the `warnings` channel:
+A resposta é a informação da sua assinatura. Agora, na outra janela, publique uma mensagem para o canal `warnings`:
 
 	publish warnings "it's over 9000!"
 
-If you go back to your first window you should have received the message to the `warnings` channel.
+Se você voltar para a sua primeira janela você deve ter recebido a mensagem no canal `warnings`.
 
-You can subscribe to multiple channels (`subscribe channel1 channel2 ...`), subscribe to a pattern of channels (`psubscribe warnings:*`) and use the `unsubscribe` and `punsubscribe` commands to stop listening to one or more channels, or a channel pattern.
+Você pode assinar múltiplos canais (`subscribe channel1 channel2 ...`), assinar um padrão de uma canal (`psubscribe warnings:*`) e usar os comandos `unsubscribe` e `punsubscribe` para parar de escutar um ou mais canais, ou um padrão de canal.
 
-Finally, notice that the `publish` command returned the value 1. This indicates the number of clients that received the message.
-
+Finalmente, perceba que o comando `publish` retorna o valor 1. Isso indica o número de clientes que receberam a mensagem.
 
 ## Monitor and Slow Log
 
