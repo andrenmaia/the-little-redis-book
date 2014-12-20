@@ -446,25 +446,25 @@ Para obter todos os ids de _bug_ para uma conta nós simplesmente chamamos `hkey
 
 Este capítulo, combinado com o anterior, permitiu a você ter alguns _insights_ de como utilizar o Redis para construir funcionalidades reais. Existem grandes números de outros padrões que você pode utilizar  para construir todo tipo de coisa, mas a chave é entender os fundamentos das estruturas de dados e ter uma noção de como elas podem ser usadas para atingir seus objetivos além de sua perspectiva inicial.
 
-# Chapter 4 - Beyond The Data Structures
+#Capítulo 4 - Além da estrutura de dados
 
-While the five data structures form the foundation of Redis, there are other commands which aren't data structure specific. We've already seen a handful of these: `info`, `select`, `flushdb`, `multi`, `exec`, `discard`, `watch` and `keys`. This chapter will look at some of the other important ones.
+Enquanto as cinco estruturas de dados formam a base do Redis, existem outros comandos que não são estruturas de dados específicas. Já vimos várias dessas: `info`, `select`, `flushdb`, `multi`, `exec`, `discard`, `watch` and `keys`. Neste capítulo veremos algumas dessas outras também importantes.
 
-## Expiration
+## Expiração
 
-Redis allows you to mark a key for expiration. You can give it an absolute time in the form of a Unix timestamp (seconds since January 1, 1970) or a time to live in seconds. This is a key-based command, so it doesn't matter what type of data structure the key represents.
+O Redis permite a você que marque uma chave para expiração. Você pode dar a chave um tempo absoluto no formato _Unix timestamp_ (total de segundos desde 1 de Janeiro de 1970) ou um tempo de permanência em segundos. Esse é uma comando chave, em não importa que tipo de estrutura de dados a chave represente.
 
 	expire pages:about 30
 	expireat pages:about 1356933600
 
-The first command will delete the key (and associated value) after 30 seconds. The second will do the same at 12:00 a.m. December 31st, 2012.
+O primeiro comando apagará a chave (e o valor associado) após 30 segundos. O segundo fará o mesmo em 31 de Dezembro de 2012 às 12:00 a.m.
 
-This makes Redis an ideal caching engine. You can find out how long an item has to live until via the `ttl` command and you can remove the expiration on a key via the `persist` command:
+Isso faz o Redis um motor de cache ideal. Você pode saber até quando um item será mantido vivo via o comando `ttl` e você pode remover a expiração de uma chave via o comando `persist`:
 
 	ttl pages:about
 	persist pages:about
 
-Finally, there's a special string command, `setex` which lets you set a string and specify a time to live in a single atomic command (this is more for convenience than anything else):
+Finalmente, existe um comando especial para string, `setex` que deixa você aplicar um valor a uma string e especificar um tempo para que ela seja mantida viva em um único comando atômico (isso é muito conveniente):
 
 	setex pages:about 30 '<h1>about us</h1>....'
 
